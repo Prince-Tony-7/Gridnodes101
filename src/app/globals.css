@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * GridNodes design tokens
+ * Slate-based dark surface, emerald = "trigger / success" node accent,
+ * indigo = "logic / AI" node accent. All tokens are exposed as Tailwind
+ * utilities through @theme (e.g. bg-surface, text-fg-muted, border-line).
+ * ------------------------------------------------------------------------- */
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Surfaces */
+  --color-canvas: #0b1120; /* page background (deeper than slate-900) */
+  --color-surface: #0f172a; /* slate-900 */
+  --color-surface-raised: #1e293b; /* slate-800 */
+  --color-surface-sunken: #080d1a; /* code wells */
+
+  /* Lines */
+  --color-line: rgb(148 163 184 / 0.12);
+  --color-line-strong: rgb(148 163 184 / 0.24);
+
+  /* Foreground */
+  --color-fg: #f1f5f9; /* slate-100 */
+  --color-fg-muted: #94a3b8; /* slate-400 */
+  --color-fg-subtle: #64748b; /* slate-500 */
+
+  /* Brand accents */
+  --color-accent: #10b981; /* emerald-500 */
+  --color-accent-strong: #34d399; /* emerald-400 */
+  --color-accent-soft: rgb(16 185 129 / 0.12);
+  --color-logic: #6366f1; /* indigo-500 */
+  --color-logic-strong: #818cf8; /* indigo-400 */
+  --color-logic-soft: rgb(99 102 241 / 0.14);
+  --color-warn: #f59e0b;
+  --color-danger: #f43f5e;
+
+  /* Syntax highlighting */
+  --color-syntax-key: #818cf8;
+  --color-syntax-string: #34d399;
+  --color-syntax-number: #fbbf24;
+  --color-syntax-literal: #f472b6;
+  --color-syntax-punct: #64748b;
+
+  --radius-card: 1rem;
+
+  --shadow-glow: 0 0 0 1px rgb(16 185 129 / 0.25), 0 8px 40px -12px rgb(16 185 129 / 0.35);
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -24px rgb(0 0 0 / 0.6);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgb(16 185 129 / 0.3);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-strong);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* Glassmorphism panel used by the sticky header and modal chrome. */
+  .glass {
+    background: rgb(15 23 42 / 0.65);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
+
+  /* Subtle node-grid background evoking the n8n canvas. */
+  .bg-node-grid {
+    background-image: radial-gradient(rgb(148 163 184 / 0.14) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, var(--color-accent-strong), var(--color-logic-strong));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Thin, unobtrusive scrollbars for code panels. */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148 163 184 / 0.25) transparent;
+}
