@@ -1,4 +1,4 @@
-/** Shared contact-form schema + validation (used by both client and API route). */
+/** Contact-form schema + validation. */
 
 export const TEAM_SIZES = ["1–50", "51–200", "201–1,000", "1,000+"] as const;
 export const TIMELINES = ["ASAP", "This quarter", "Next quarter", "Exploring"] as const;

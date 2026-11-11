@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useRef } from "react";
 import { useWorkflowFilters } from "@/hooks/useWorkflowFilters";
 import { collectIntegrations } from "@/lib/workflows";
@@ -19,7 +19,6 @@ const PARAM = "workflow";
  */
 export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const integrations = useMemo(() => collectIntegrations(workflows), [workflows]);
   const f = useWorkflowFilters(workflows);
 
@@ -35,9 +34,10 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
       pushedRef.current = true;
       const params = new URLSearchParams(searchParams.toString());
       params.set(PARAM, slug);
-      window.history.pushState(null, "", `${pathname}?${params.toString()}`);
+      // window.location.pathname (unlike usePathname) includes the deploy basePath.
+      window.history.pushState(null, "", `${window.location.pathname}?${params.toString()}`);
     },
-    [pathname, searchParams],
+    [searchParams],
   );
 
   const close = useCallback(() => {
@@ -49,8 +49,9 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(PARAM);
     const qs = params.toString();
-    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
-  }, [pathname, searchParams]);
+    const path = window.location.pathname;
+    window.history.replaceState(null, "", qs ? `${path}?${qs}` : path);
+  }, [searchParams]);
 
   return (
     <>

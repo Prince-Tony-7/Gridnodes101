@@ -15,6 +15,13 @@ import {
   type ContactPayload,
 } from "@/lib/contact";
 
+/**
+ * The site is a static export (GitHub Pages), so the form posts straight to an
+ * n8n Webhook node. Set NEXT_PUBLIC_INTAKE_WEBHOOK_URL at build time and allow
+ * the site's origin in the webhook's CORS settings.
+ */
+const INTAKE_WEBHOOK_URL = process.env.NEXT_PUBLIC_INTAKE_WEBHOOK_URL;
+
 const INITIAL: ContactPayload = {
   name: "",
   email: "",
@@ -94,23 +101,31 @@ export function ContactForm() {
       return;
     }
 
+    // Bots fill the hidden honeypot field: accept silently, send nothing.
+    if (values.website) {
+      setStatus("success");
+      return;
+    }
+
+    if (!INTAKE_WEBHOOK_URL) {
+      setServerError("Online booking isn't connected yet. Please reach out to us directly in the meantime.");
+      setStatus("error");
+      return;
+    }
+
     setStatus("submitting");
     try {
-      const res = await fetch("/api/contact", {
+      const payload: Omit<ContactPayload, "website"> = { ...values };
+      delete (payload as Partial<ContactPayload>).website;
+      const res = await fetch(INTAKE_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString(), page: window.location.href }),
       });
-      const data: { ok: boolean; errors?: ContactErrors; error?: string } = await res.json();
-      if (!res.ok || !data.ok) {
-        if (data.errors) setErrors(data.errors);
-        setServerError(data.error ?? "Please review the highlighted fields.");
-        setStatus("error");
-        return;
-      }
+      if (!res.ok) throw new Error(`Webhook responded ${res.status}`);
       setStatus("success");
     } catch {
-      setServerError("Network error — please try again.");
+      setServerError("We couldn't send that just now. Please try again in a moment.");
       setStatus("error");
     }
   }
