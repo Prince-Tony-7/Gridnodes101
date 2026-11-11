@@ -3,60 +3,71 @@
 /* ---------------------------------------------------------------------------
  * GridNodes design tokens
  *
- * Warm "paper" canvas, near-black ink, and a saturated node palette. Every
+ * Off-white canvas, deep navy ink and a restrained accent palette. Every
  * department and every n8n node role owns a colour (see src/lib/palette.ts).
- * Depth comes from ink outlines + hard offset shadows rather than glows.
+ * Depth comes from hairline borders and soft, low shadows.
  * ------------------------------------------------------------------------- */
 @theme {
   --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque Variable", "DM Sans Variable", ui-sans-serif, sans-serif;
+  --font-display: "Inter Tight Variable", "DM Sans Variable", ui-sans-serif, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Surfaces */
-  --color-paper: #fbf6ec;
-  --color-paper-deep: #f2e9d8;
-  --color-card: #fffdf8;
+  --color-paper: #f7f7f4;
+  --color-paper-deep: #eeeee9;
+  --color-card: #ffffff;
 
-  /* Ink */
-  --color-ink: #16130f;
-  --color-ink-soft: #4a443b;
-  --color-ink-mute: #7a7266;
+  /* Ink (deep navy, softer than pure black) */
+  --color-ink: #121527;
+  --color-ink-soft: #464b5e;
+  --color-ink-mute: #777c8c;
 
-  /* Node palette */
-  --color-coral: #ff5a36;
-  --color-sun: #ffc738;
-  --color-mint: #1dbf98;
-  --color-sky: #3db2ff;
-  --color-violet: #7a5cff;
-  --color-pink: #ff77b7;
+  /* Hairlines */
+  --color-line: #e3e3dd;
+  --color-line-strong: #cfcfc8;
 
-  /* Pale tints of the palette for large fills */
-  --color-coral-tint: #ffe1d8;
-  --color-sun-tint: #fff1c7;
-  --color-mint-tint: #d3f5ea;
-  --color-sky-tint: #d8efff;
-  --color-violet-tint: #e5deff;
-  --color-pink-tint: #ffe0ef;
+  /* Accent palette: used for small marks, icons and data, not big fills */
+  --color-coral: #f0603f;
+  --color-sun: #f4b42c;
+  --color-mint: #16a57f;
+  --color-sky: #2f8be0;
+  --color-violet: #6a52e8;
+  --color-pink: #df5794;
 
-  --color-danger: #e0301e;
+  /* Darker shades for text on tints */
+  --color-coral-deep: #b8401f;
+  --color-sun-deep: #8f6200;
+  --color-mint-deep: #0b7558;
+  --color-sky-deep: #1b62a8;
+  --color-violet-deep: #4b35b8;
+  --color-pink-deep: #a8336a;
+
+  /* Pale tints for surfaces */
+  --color-coral-tint: #fde3d9;
+  --color-sun-tint: #fdf4dd;
+  --color-mint-tint: #e3f5ef;
+  --color-sky-tint: #e6f1fc;
+  --color-violet-tint: #eeebfd;
+  --color-pink-tint: #fcebf3;
+
+  --color-danger: #d23a26;
 
   /* Code panels stay dark for legibility */
-  --color-code: #1c1814;
-  --color-code-line: #3a332b;
-  --color-syntax-key: #9d8bff;
-  --color-syntax-string: #5fe0b9;
-  --color-syntax-number: #ffd166;
-  --color-syntax-literal: #ff8fc6;
-  --color-syntax-punct: #8a8174;
+  --color-code: #12151f;
+  --color-code-line: #2a2f3d;
+  --color-syntax-key: #a59bff;
+  --color-syntax-string: #6edcb8;
+  --color-syntax-number: #f6c66b;
+  --color-syntax-literal: #f392c0;
+  --color-syntax-punct: #858a99;
 
-  --radius-card: 1.25rem;
+  --radius-card: 1rem;
 
-  --shadow-pop-sm: 2px 2px 0 0 var(--color-ink);
-  --shadow-pop: 4px 4px 0 0 var(--color-ink);
-  --shadow-pop-lg: 8px 8px 0 0 var(--color-ink);
+  --shadow-pop-sm: 0 1px 2px 0 rgb(18 21 39 / 0.06);
+  --shadow-pop: 0 1px 2px 0 rgb(18 21 39 / 0.05), 0 6px 20px -10px rgb(18 21 39 / 0.14);
+  --shadow-pop-lg: 0 2px 4px 0 rgb(18 21 39 / 0.04), 0 24px 48px -20px rgb(18 21 39 / 0.22);
 
   --animate-marquee: marquee 38s linear infinite;
-  --animate-wiggle: wiggle 2.8s ease-in-out infinite;
 
   @keyframes marquee {
     from {
@@ -67,15 +78,6 @@
     }
   }
 
-  @keyframes wiggle {
-    0%,
-    100% {
-      transform: rotate(-3deg);
-    }
-    50% {
-      transform: rotate(3deg);
-    }
-  }
 }
 
 @layer base {
@@ -96,10 +98,11 @@
   h2,
   h3 {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 
   ::selection {
-    background: var(--color-sun);
+    background: var(--color-violet-tint);
     color: var(--color-ink);
   }
 
@@ -122,26 +125,28 @@
 }
 
 @layer components {
-  /* Outlined "sticker" surface used for cards, panels and buttons. */
+  /* Hairline-bordered surface used for cards, panels and buttons. */
   .pop {
-    border: 2px solid var(--color-ink);
+    border: 1px solid var(--color-line);
     box-shadow: var(--shadow-pop);
   }
 
   /* Dotted canvas texture, a nod to the n8n editor. */
   .bg-dots {
-    background-image: radial-gradient(rgb(22 19 15 / 0.16) 1.2px, transparent 1.2px);
+    background-image: radial-gradient(rgb(18 21 39 / 0.09) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 
-  /* Highlighter stroke behind a word. */
-  .marker {
-    background-image: linear-gradient(transparent 58%, var(--marker, var(--color-sun)) 58%, var(--marker, var(--color-sun)) 92%, transparent 92%);
-    padding-inline: 0.08em;
+  /* Accent gradient for a key phrase. */
+  .text-accent {
+    background: linear-gradient(100deg, var(--color-coral) 0%, var(--color-pink) 45%, var(--color-violet) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
 
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgb(255 255 255 / 0.2) transparent;
+  scrollbar-color: rgb(255 255 255 / 0.18) transparent;
 }

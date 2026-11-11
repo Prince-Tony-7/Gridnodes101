@@ -9,31 +9,31 @@ import { cn } from "@/lib/cn";
 const props = [
   {
     icon: ShieldCheck,
-    title: "Breaks loudly, never silently",
-    body: "Every build ships with a global error workflow, retries with backoff and idempotent writes. If something fails at 3am, you hear about it, and nothing gets double-charged.",
-    className: "bg-coral-tint lg:col-span-2",
-    iconBg: "bg-coral",
+    title: "Fails loudly, never silently",
+    body: "Every build ships with a global error workflow, retries with backoff and idempotent writes. When something fails, your team is alerted immediately and nothing is processed twice.",
+    className: "lg:col-span-2",
+    iconBg: "bg-coral-tint text-coral-deep",
   },
   {
     icon: Gauge,
-    title: "Handles the busy days",
+    title: "Built for peak volume",
     body: "Queue-mode n8n, horizontal workers, rate-limit aware batching.",
-    className: "bg-sky-tint",
-    iconBg: "bg-sky",
+    className: "",
+    iconBg: "bg-sky-tint text-sky-deep",
   },
   {
     icon: LineChart,
-    title: "ROI with receipts",
-    body: "We measure the manual baseline first, then show you the hours saved.",
-    className: "bg-sun-tint",
-    iconBg: "bg-sun",
+    title: "Measurable ROI",
+    body: "We measure the manual baseline first, then report hours and errors saved.",
+    className: "",
+    iconBg: "bg-sun-tint text-sun-deep",
   },
   {
     icon: Code2,
-    title: "You own all of it",
-    body: "Version-controlled JSON, documented nodes and a handover runbook. No black boxes, no lock-in, no retainer you can't leave.",
-    className: "bg-mint-tint lg:col-span-2",
-    iconBg: "bg-mint",
+    title: "You own everything",
+    body: "Version-controlled JSON, documented nodes and a handover runbook. No black boxes and no vendor lock-in.",
+    className: "lg:col-span-2",
+    iconBg: "bg-mint-tint text-mint-deep",
   },
 ];
 
@@ -44,29 +44,28 @@ export function ValueProps() {
         <SectionHeading
           kicker="How we build"
           kickerClass="bg-mint"
-          title="Low-code, not low standards."
-          description="We treat every canvas like real software, because for your team it is."
+          title="Low-code tooling. Software engineering standards."
+          description="Every workflow is built, tested and handed over like production software, because for your business it is."
         />
-        <div className="mt-12 grid gap-5 lg:grid-cols-4">
+        <div className="mt-12 grid gap-5 lg:grid-cols-3">
           {props.map(({ icon: Icon, title, body, className, iconBg }, i) => (
             <motion.div
               key={title}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ type: "spring", stiffness: 220, damping: 24, delay: i * 0.06 }}
-              whileHover={{ y: -4 }}
-              className={cn("pop rounded-card p-7", className)}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
+              className={cn("pop rounded-card bg-card p-7 transition-shadow hover:shadow-pop-lg", className)}
             >
               <span
                 className={cn(
-                  "inline-flex h-12 w-12 items-center justify-center rounded-xl border-2 border-ink shadow-pop-sm",
+                  "inline-flex h-11 w-11 items-center justify-center rounded-xl",
                   iconBg,
                 )}
               >
-                <Icon className="h-6 w-6 text-ink" strokeWidth={2.25} aria-hidden />
+                <Icon className="h-5 w-5" strokeWidth={2} aria-hidden />
               </span>
-              <h3 className="mt-5 text-2xl font-bold tracking-tight text-ink">{title}</h3>
+              <h3 className="mt-5 text-xl font-semibold tracking-tight text-ink">{title}</h3>
               <p className="mt-2 leading-relaxed text-ink-soft">{body}</p>
             </motion.div>
           ))}

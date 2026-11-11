@@ -1,5 +1,6 @@
 "use client";
 
+import { SearchX } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useRef } from "react";
@@ -87,16 +88,16 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
       </motion.ul>
 
       {f.results.length === 0 && (
-        <div className="pop mt-8 flex flex-col items-center rounded-card bg-sun-tint px-6 py-16 text-center">
-          <span className="inline-block animate-wiggle text-5xl" aria-hidden>
-            🔌
+        <div className="pop mt-8 flex flex-col items-center rounded-card bg-card px-6 py-16 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-paper-deep text-ink-soft" aria-hidden>
+            <SearchX className="h-6 w-6" />
           </span>
-          <p className="mt-4 font-display text-2xl font-bold text-ink">Nothing wired up for that combo yet.</p>
-          <p className="mt-1 text-ink-soft">Drop a filter, or tell us what you need and we&rsquo;ll build it.</p>
+          <p className="mt-4 font-display text-xl font-semibold text-ink">No workflows match these filters.</p>
+          <p className="mt-1 text-ink-soft">Try removing a filter, or tell us what you need and we&rsquo;ll scope it.</p>
           <button
             type="button"
             onClick={f.reset}
-            className="mt-6 rounded-full border-2 border-ink bg-card px-4 py-2 font-semibold shadow-pop-sm hover:bg-sun"
+            className="mt-6 rounded-lg border border-line-strong bg-card px-4 py-2 text-sm font-semibold shadow-pop-sm hover:bg-paper"
           >
             Reset filters
           </button>

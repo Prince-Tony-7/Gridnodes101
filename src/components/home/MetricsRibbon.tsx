@@ -12,8 +12,7 @@ interface Metric {
   decimals?: number;
 }
 
-const COLORS = ["bg-sun", "bg-sky", "bg-pink", "bg-mint"];
-const TILTS = ["-rotate-1", "rotate-1", "-rotate-[0.5deg]", "rotate-[1.5deg]"];
+const ACCENTS = ["bg-coral", "bg-sky", "bg-violet", "bg-mint"];
 
 function formatNumber(n: number, decimals = 0) {
   return n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
@@ -45,17 +44,29 @@ function CountUp({ value, decimals = 0, suffix = "" }: Omit<Metric, "label">) {
 
 export function MetricsRibbon({ metrics }: { metrics: readonly Metric[] }) {
   return (
-    <section aria-label="Portfolio metrics" className="py-10">
+    <section aria-label="Portfolio metrics" className="py-16">
       <Container>
-        <dl className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        <dl className="pop grid grid-cols-2 overflow-hidden rounded-card bg-card lg:grid-cols-4">
           {metrics.map((m, i) => (
             <motion.div
               key={m.label}
-              whileHover={{ rotate: 0, y: -4 }}
-              className={cn("pop flex flex-col rounded-card p-5 sm:p-6", COLORS[i % COLORS.length], TILTS[i % TILTS.length])}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
+              className={cn(
+                "flex flex-col border-line p-6 sm:p-8",
+                i % 2 === 0 && "border-r",
+                i < 2 && "border-b lg:border-b-0",
+                i === 1 && "lg:border-r",
+                i === 2 && "lg:border-r",
+              )}
             >
-              <dt className="order-2 mt-1 text-sm font-semibold text-ink/75">{m.label}</dt>
-              <dd className="order-1 font-display text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
+              <dt className="order-2 mt-2 flex items-center gap-2 text-sm font-medium text-ink-soft">
+                <span className={cn("h-1.5 w-1.5 rounded-full", ACCENTS[i % ACCENTS.length])} aria-hidden />
+                {m.label}
+              </dt>
+              <dd className="order-1 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
                 <CountUp value={m.value} suffix={m.suffix} decimals={m.decimals} />
               </dd>
             </motion.div>

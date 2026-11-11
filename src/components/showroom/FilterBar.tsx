@@ -44,8 +44,8 @@ function Chip({
       aria-pressed={selected}
       onClick={onClick}
       className={cn(
-        "rounded-full border-2 border-ink px-3.5 py-1 text-sm font-semibold transition-all duration-150",
-        selected ? cn(color, "-translate-y-0.5 shadow-pop-sm") : "bg-card text-ink hover:bg-paper-deep",
+        "rounded-md border px-3 py-1 text-sm font-medium transition-colors duration-150",
+        selected ? cn(color, "border-transparent") : "border-line bg-card text-ink-soft hover:border-line-strong hover:text-ink",
       )}
     >
       {children}
@@ -55,8 +55,8 @@ function Chip({
 
 function FacetGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <fieldset className="flex flex-wrap items-center gap-2">
-      <legend className="mb-2.5 w-full text-sm font-bold text-ink">{label}</legend>
+    <fieldset className="flex flex-wrap content-start items-start gap-2">
+      <legend className="mb-2.5 w-full text-xs font-semibold tracking-wider text-ink-mute uppercase">{label}</legend>
       {children}
     </fieldset>
   );
@@ -70,24 +70,24 @@ export function FilterBar(props: FilterBarProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <label className="relative flex-1">
           <span className="sr-only">Search workflows</span>
-          <Search className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-ink" aria-hidden />
+          <Search className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-ink-mute" aria-hidden />
           <input
             type="search"
             value={filters.query}
             onChange={(e) => props.onQueryChange(e.target.value)}
-            placeholder="Try “stripe”, “AI” or “slack”…"
-            className="w-full rounded-full border-2 border-ink bg-paper py-3 pr-4 pl-12 text-base text-ink placeholder:text-ink-mute focus:bg-sun-tint focus:outline-none"
+            placeholder="Search by name, tool or use case"
+            className="w-full rounded-lg border border-line bg-paper py-2.5 pr-4 pl-12 text-base text-ink placeholder:text-ink-mute focus:border-violet focus:bg-card focus:ring-4 focus:ring-violet/10 focus:outline-none"
           />
         </label>
         <div className="flex items-center justify-between gap-3 sm:justify-end">
-          <p className="text-sm font-semibold text-ink-soft" aria-live="polite">
-            <span className="font-display text-xl font-extrabold text-ink">{resultCount}</span> of {totalCount}
+          <p className="text-sm text-ink-soft" aria-live="polite">
+            <span className="font-semibold text-ink">{resultCount}</span> of {totalCount} workflows
           </p>
           {active && (
             <button
               type="button"
               onClick={props.onReset}
-              className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-coral-tint px-3 py-1 text-sm font-semibold hover:bg-coral"
+              className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-sm font-medium text-ink-soft hover:bg-paper-deep hover:text-ink"
             >
               <X className="h-4 w-4" aria-hidden /> Clear
             </button>
@@ -101,7 +101,7 @@ export function FilterBar(props: FilterBarProps) {
             <Chip
               key={d}
               selected={filters.departments.includes(d)}
-              color={departmentColor[d].solid}
+              color={departmentColor[d].soft}
               onClick={() => props.onToggleDepartment(d)}
             >
               {d}

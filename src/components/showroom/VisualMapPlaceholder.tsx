@@ -15,7 +15,7 @@ export function VisualMapPlaceholder({ nodes }: { nodes: WorkflowNode[] }) {
   const reduce = useReducedMotion();
 
   return (
-    <div className="bg-dots pop relative rounded-2xl bg-card p-5">
+    <div className="bg-dots pop relative rounded-xl bg-card p-5">
       <div className="flex flex-wrap items-center gap-y-4">
         {nodes.map((node, i) => {
           const style = nodeKindStyles[node.kind];
@@ -26,11 +26,13 @@ export function VisualMapPlaceholder({ nodes }: { nodes: WorkflowNode[] }) {
                 initial={reduce ? false : { opacity: 0, scale: 0.6 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20, delay: i * 0.07 }}
-                className={cn("flex items-center gap-2 rounded-xl border-2 border-ink px-3 py-2 shadow-pop-sm", style.solid)}
+                className={"flex items-center gap-2 rounded-lg border border-line bg-card px-3 py-2 shadow-pop-sm"}
                 title={node.type}
               >
-                <Icon className="h-4 w-4 text-ink" strokeWidth={2.5} aria-hidden />
-                <span className="max-w-40 truncate text-xs font-bold text-ink">{node.name}</span>
+                <span className={cn("flex h-6 w-6 items-center justify-center rounded-md", style.soft)}>
+                  <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
+                </span>
+                <span className="max-w-40 truncate text-xs font-medium text-ink">{node.name}</span>
               </motion.div>
               {i < nodes.length - 1 && (
                 <svg viewBox="0 0 32 12" className="h-3 w-8 shrink-0" aria-hidden>
@@ -39,12 +41,12 @@ export function VisualMapPlaceholder({ nodes }: { nodes: WorkflowNode[] }) {
                     y1="6"
                     x2="26"
                     y2="6"
-                    stroke="var(--color-ink)"
-                    strokeWidth="2.5"
+                    stroke="var(--color-line-strong)"
+                    strokeWidth="1.5"
                     strokeDasharray="4 4"
                     className={reduce ? undefined : "[animation:dash_0.6s_linear_infinite]"}
                   />
-                  <path d="M24 1 L31 6 L24 11 Z" fill="var(--color-ink)" />
+                  <path d="M24 1 L31 6 L24 11 Z" fill="var(--color-line-strong)" />
                 </svg>
               )}
             </Fragment>

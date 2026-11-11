@@ -5,14 +5,13 @@ import { cn } from "@/lib/cn";
 type Variant = "primary" | "secondary" | "ink";
 
 export const buttonStyles: Record<Variant, string> = {
-  primary: "bg-coral text-ink",
-  secondary: "bg-card text-ink",
-  ink: "bg-ink text-paper",
+  primary: "border-ink bg-ink text-white hover:bg-[#262a40]",
+  secondary: "border-line-strong bg-card text-ink hover:border-ink-mute hover:bg-paper",
+  ink: "border-ink bg-ink text-white hover:bg-[#262a40]",
 };
 
-/** Chunky outlined button that "presses" into its shadow. */
 export const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink px-5 py-2.5 text-sm font-bold shadow-pop transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-pop-lg active:translate-x-1 active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-semibold shadow-pop-sm transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60";
 
 export function ButtonLink({
   variant = "primary",

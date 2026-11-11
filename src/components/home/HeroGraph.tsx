@@ -26,11 +26,11 @@ interface GraphNode {
 }
 
 const NODES: GraphNode[] = [
-  { id: "hook", label: "Webhook", icon: Webhook, x: 76, y: 180, fill: "bg-coral", color: "var(--color-coral)" },
-  { id: "ai", label: "AI score", icon: Bot, x: 215, y: 90, fill: "bg-pink", color: "var(--color-pink)" },
-  { id: "route", label: "Route", icon: GitBranch, x: 290, y: 250, fill: "bg-violet text-white", color: "var(--color-violet)" },
-  { id: "crm", label: "HubSpot", icon: Database, x: 440, y: 120, fill: "bg-sky", color: "var(--color-sky)" },
-  { id: "slack", label: "Slack", icon: MessageSquare, x: 440, y: 285, fill: "bg-mint", color: "var(--color-mint)" },
+  { id: "hook", label: "Webhook", icon: Webhook, x: 76, y: 180, fill: "bg-coral-tint text-coral-deep", color: "var(--color-coral)" },
+  { id: "ai", label: "AI score", icon: Bot, x: 215, y: 90, fill: "bg-pink-tint text-pink-deep", color: "var(--color-pink)" },
+  { id: "route", label: "Route", icon: GitBranch, x: 290, y: 250, fill: "bg-violet-tint text-violet-deep", color: "var(--color-violet)" },
+  { id: "crm", label: "HubSpot", icon: Database, x: 440, y: 120, fill: "bg-sky-tint text-sky-deep", color: "var(--color-sky)" },
+  { id: "slack", label: "Slack", icon: MessageSquare, x: 440, y: 285, fill: "bg-mint-tint text-mint-deep", color: "var(--color-mint)" },
 ];
 
 const EDGES: Array<[string, string]> = [
@@ -64,13 +64,13 @@ export function HeroGraph() {
   return (
     <div className="pop relative overflow-hidden rounded-card bg-card">
       {/* window chrome */}
-      <div className="flex items-center justify-between border-b-2 border-ink bg-paper-deep px-4 py-2.5">
+      <div className="flex items-center justify-between border-b border-line bg-paper px-4 py-2.5">
         <div className="flex gap-1.5" aria-hidden>
-          <span className="h-3 w-3 rounded-full border-2 border-ink bg-coral" />
-          <span className="h-3 w-3 rounded-full border-2 border-ink bg-sun" />
-          <span className="h-3 w-3 rounded-full border-2 border-ink bg-mint" />
+          <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+          <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+          <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
         </div>
-        <span className="font-mono text-xs font-semibold text-ink-soft">lead-router.json</span>
+        <span className="font-mono text-xs text-ink-mute">lead-router.json</span>
         <span className="w-12" aria-hidden />
       </div>
 
@@ -84,8 +84,8 @@ export function HeroGraph() {
                 <motion.path
                   d={d}
                   fill="none"
-                  stroke="var(--color-ink)"
-                  strokeWidth={2.5}
+                  stroke="var(--color-line-strong)"
+                  strokeWidth={1.75}
                   strokeLinecap="round"
                   initial={reduce ? false : { pathLength: 0 }}
                   animate={{ pathLength: 1 }}
@@ -93,7 +93,7 @@ export function HeroGraph() {
                 />
                 {!reduce &&
                   [0, 1].map((k) => (
-                    <circle key={k} r={6} fill={target.color} stroke="var(--color-ink)" strokeWidth={2} opacity={0}>
+                    <circle key={k} r={4} fill={target.color} opacity={0}>
                       <animateMotion dur="2.4s" begin={`${1.4 + i * 0.6 + k * 1.2}s`} repeatCount="indefinite" path={d} />
                       <animate
                         attributeName="opacity"
@@ -117,17 +117,16 @@ export function HeroGraph() {
               key={n.id}
               className="absolute"
               style={{ left: `${(n.x / W) * 100}%`, top: `${(n.y / H) * 100}%`, width: `${((NODE_HALF_W * 2) / W) * 100}%` }}
-              initial={reduce ? false : { opacity: 0, scale: 0.4 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 380, damping: 18, delay: 0.1 + i * 0.12 }}
+              initial={reduce ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 + i * 0.1 }}
             >
               <div
-                className={cn(
-                  "flex -translate-x-1/2 -translate-y-1/2 items-center gap-[1.5cqw] rounded-[2cqw] border-2 border-ink px-[2cqw] py-[1.8cqw] text-[3cqw] leading-none font-bold text-ink shadow-pop-sm",
-                  n.fill,
-                )}
+                className="flex -translate-x-1/2 -translate-y-1/2 items-center gap-[1.6cqw] rounded-[1.6cqw] border border-line bg-card px-[1.6cqw] py-[1.4cqw] text-[2.9cqw] leading-none font-medium text-ink shadow-pop"
               >
-                <Icon className="h-[3.6cqw] w-[3.6cqw] shrink-0" strokeWidth={2.5} />
+                <span className={cn("flex shrink-0 items-center justify-center rounded-[1cqw] p-[0.9cqw]", n.fill)}>
+                  <Icon className="h-[3.2cqw] w-[3.2cqw]" strokeWidth={2} />
+                </span>
                 <span className="truncate">{n.label}</span>
               </div>
             </motion.div>
@@ -135,11 +134,11 @@ export function HeroGraph() {
         })}
       </div>
 
-      <div className="flex items-center justify-between border-t-2 border-ink px-4 py-2.5 text-xs font-semibold">
+      <div className="flex items-center justify-between border-t border-line px-4 py-2.5 text-xs font-medium text-ink-soft">
         <span className="inline-flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full border border-ink bg-mint" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-mint" />
           </span>
           Active
         </span>

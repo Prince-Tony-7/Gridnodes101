@@ -46,7 +46,7 @@ export function Tabs<T extends string>({ items, value, onChange, children }: Tab
 
   return (
     <div>
-      <div role="tablist" className="flex gap-1 rounded-full border-2 border-ink bg-card p-1">
+      <div role="tablist" className="flex gap-1 rounded-lg bg-paper-deep p-1">
         {items.map((item, i) => {
           const selected = item.id === value;
           return (
@@ -64,14 +64,14 @@ export function Tabs<T extends string>({ items, value, onChange, children }: Tab
               onClick={() => onChange(item.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                "relative z-0 flex flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-2 text-xs font-bold transition-colors sm:px-3 sm:text-sm",
+                "relative z-0 flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:px-3 sm:text-sm",
                 selected ? "text-ink" : "text-ink-soft hover:text-ink",
               )}
             >
               {selected && (
                 <motion.span
                   layoutId={`${baseId}-indicator`}
-                  className={cn("absolute inset-0 -z-10 rounded-full border-2 border-ink", item.color ?? "bg-sun")}
+                  className={cn("absolute inset-0 -z-10 rounded-md shadow-pop-sm", item.color ?? "bg-card")}
                   transition={{ type: "spring", stiffness: 480, damping: 34 }}
                 />
               )}

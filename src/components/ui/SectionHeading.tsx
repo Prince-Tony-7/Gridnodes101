@@ -3,14 +3,14 @@ import { cn } from "@/lib/cn";
 
 export function SectionHeading({
   kicker,
-  kickerClass = "bg-sun",
+  kickerClass = "bg-violet",
   title,
   description,
   className,
   as: Tag = "h2",
 }: {
   kicker?: string;
-  /** Background colour of the kicker sticker. */
+  /** Background colour of the small accent dot before the kicker. */
   kickerClass?: string;
   title: ReactNode;
   description?: ReactNode;
@@ -20,16 +20,12 @@ export function SectionHeading({
   return (
     <div className={cn("max-w-2xl space-y-4", className)}>
       {kicker && (
-        <span
-          className={cn(
-            "inline-block -rotate-2 rounded-md border-2 border-ink px-2.5 py-1 text-sm font-bold text-ink shadow-pop-sm",
-            kickerClass,
-          )}
-        >
+        <p className="inline-flex items-center gap-2 text-sm font-semibold tracking-wide text-ink-soft uppercase">
+          <span className={cn("h-1.5 w-1.5 rounded-full", kickerClass)} aria-hidden />
           {kicker}
-        </span>
+        </p>
       )}
-      <Tag className="text-4xl leading-[1.05] font-extrabold tracking-tight text-balance text-ink sm:text-5xl">{title}</Tag>
+      <Tag className="text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-ink sm:text-5xl">{title}</Tag>
       {description && <p className="text-lg leading-relaxed text-pretty text-ink-soft">{description}</p>}
     </div>
   );

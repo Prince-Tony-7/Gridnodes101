@@ -17,10 +17,10 @@ export default async function ShowroomPage() {
     <Container className="pt-14 pb-8">
       <SectionHeading
         as="h1"
-        kicker="The showroom"
+        kicker="Showroom"
         kickerClass="bg-sky"
-        title="Workflows we've actually shipped."
-        description="Filter by team, tool or complexity. Open any card for the node-by-node breakdown, the numbers, and JSON you can paste straight into n8n."
+        title="Automation workflow library."
+        description="Filter by team, integration or complexity. Each workflow includes a node-by-node breakdown, business impact and importable n8n JSON."
       />
       <div className="mt-10">
         {/* useSearchParams (deep-linked modal) requires a Suspense boundary for static rendering. */}

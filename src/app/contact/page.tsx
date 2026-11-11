@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  { title: "We read your intake", body: "Before we meet, we look at your bottleneck and the tools involved.", color: "bg-coral" },
-  { title: "45-minute discovery", body: "An engineer maps the process with you and sizes the opportunity.", color: "bg-sun" },
-  { title: "A scoped proposal", body: "Fixed scope, architecture sketch, timeline and projected ROI.", color: "bg-mint" },
+  { title: "We read your intake", body: "Before we meet, we look at your bottleneck and the tools involved.", color: "bg-coral-tint text-coral-deep" },
+  { title: "45-minute discovery", body: "An engineer maps the process with you and sizes the opportunity.", color: "bg-sun-tint text-sun-deep" },
+  { title: "A scoped proposal", body: "Fixed scope, architecture sketch, timeline and projected ROI.", color: "bg-mint-tint text-mint-deep" },
 ];
 
 export default function ContactPage() {
@@ -24,22 +24,22 @@ export default function ContactPage() {
             as="h1"
             kicker="Discovery call"
             kickerClass="bg-pink"
-            title="Where is your team losing hours?"
-            description="Tell us about the copy-paste, the exports, the 'quick check' that takes all afternoon. We'll show up with a draft plan."
+            title="Let’s find where your team is losing hours."
+            description="Share the manual processes slowing your team down. We’ll review them before we meet and arrive with a draft automation plan."
           />
           <ol className="space-y-4">
             {steps.map(({ title, body, color }, i) => (
               <li key={title} className="flex gap-4">
                 <span
                   className={cn(
-                    "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-ink font-display text-lg font-extrabold shadow-pop-sm",
+                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-display text-sm font-semibold",
                     color,
                   )}
                 >
                   {i + 1}
                 </span>
                 <div className="pt-1">
-                  <p className="font-display text-lg font-bold text-ink">{title}</p>
+                  <p className="font-semibold text-ink">{title}</p>
                   <p className="mt-0.5 text-ink-soft">{body}</p>
                 </div>
               </li>
