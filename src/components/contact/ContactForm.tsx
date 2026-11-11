@@ -9,12 +9,12 @@ import { validateContact, type ContactErrors, type ContactPayload } from "@/lib/
 import { siteConfig } from "@/lib/site";
 
 /**
- * GitHub Pages can't process forms, so submissions go to Formspree.
- * Set siteConfig.formspreeId in src/lib/site.ts. Until then (or if Formspree
- * fails) visitors are offered a mailto link instead.
+ * GitHub Pages can't process forms, so submissions go to a Google Apps Script
+ * web app (siteConfig.enquiryEndpoint in src/lib/site.ts). If the endpoint is
+ * empty or the request fails, visitors are offered a mailto link instead.
  */
-const FORMSPREE_ID: string = siteConfig.formspreeId;
-const FORMSPREE_READY = FORMSPREE_ID !== "" && FORMSPREE_ID !== "FORMSPREE_ID";
+const ENQUIRY_ENDPOINT: string = siteConfig.enquiryEndpoint;
+const ENDPOINT_READY = ENQUIRY_ENDPOINT.trim() !== "";
 const EMAIL = siteConfig.owner.email;
 
 const INITIAL: ContactPayload = { name: "", email: "", message: "", source: "", _gotcha: "" };
@@ -96,7 +96,7 @@ export function ContactForm() {
       return;
     }
 
-    if (!FORMSPREE_READY) {
+    if (!ENDPOINT_READY) {
       setServerError("The online form isn't switched on yet.");
       setStatus("error");
       return;
@@ -104,19 +104,21 @@ export function ContactForm() {
 
     setStatus("submitting");
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      // text/plain keeps this a "simple" CORS request (no preflight), which Apps Script requires.
+      const res = await fetch(ENQUIRY_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
           name: values.name,
           email: values.email,
           message: values.message,
           source: values.source,
           _gotcha: values._gotcha,
-          _subject: `GridNodes enquiry from ${values.name}`,
         }),
       });
-      if (!res.ok) throw new Error(`Formspree responded ${res.status}`);
+      const data: unknown = await res.json().catch(() => null);
+      const ok = res.ok && typeof data === "object" && data !== null && (data as { ok?: unknown }).ok === true;
+      if (!ok) throw new Error(`Enquiry endpoint responded ${res.status}`);
       setStatus("success");
     } catch {
       setServerError("Sorry, that didn't send.");

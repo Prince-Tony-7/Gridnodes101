@@ -7,7 +7,7 @@ export interface ContactPayload {
   message: string;
   /** Optional: "How did you hear about GridNodes?" */
   source: string;
-  /** Formspree honeypot: must stay empty (bots fill it in). */
+  /** Honeypot: must stay empty (bots fill it in). */
   _gotcha: string;
 }
 

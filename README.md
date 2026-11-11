@@ -4,7 +4,7 @@ Website for GridNodes: **n8n** workflow automation for Irish small businesses, b
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Framer Motion · Lucide React · Inter Tight + DM Sans + JetBrains Mono
 
-Personal details, the Formspree ID and feature switches all live in `src/lib/site.ts`.
+Personal details, the contact-form endpoint and feature switches all live in `src/lib/site.ts`.
 
 ## Getting started
 
@@ -27,13 +27,9 @@ The site is then published at `https://<owner>.github.io/<repo>/`.
 
 ## Contact form
 
-GitHub Pages can't process forms, so the contact form posts to **Formspree**.
+GitHub Pages can't process forms, so the contact form posts to a **Google Apps Script web app**, set as `enquiryEndpoint` in `src/lib/site.ts`.
 
-1. Create a free form at [formspree.io](https://formspree.io) using the email address you want enquiries sent to.
-2. Copy the form ID (the part after `https://formspree.io/f/`).
-3. Replace `FORMSPREE_ID` with it in `src/lib/site.ts` (`formspreeId`).
-
-Until then, the form validates input and then offers a pre-filled `mailto:` link instead of sending.
+The form sends `name`, `email`, `message`, `source` and `_gotcha` (honeypot) as a JSON string with `Content-Type: text/plain;charset=utf-8`, which keeps it a simple CORS request that Apps Script accepts. The script must reply with JSON containing `"ok": true`; anything else shows an error with a pre-filled `mailto:` fallback. If `enquiryEndpoint` is empty, the form validates input and then offers the `mailto:` link instead of sending.
 
 ## Brand
 
@@ -78,7 +74,7 @@ src/
 │  ├─ showroom/page.tsx      Example workflows, filterable (deep links: ?workflow=<slug>)
 │  ├─ about/page.tsx         About Prince Tony
 │  ├─ demos/page.tsx         Demo videos (behind features.demos)
-│  ├─ contact/page.tsx       Contact form (Formspree + mailto fallback)
+│  ├─ contact/page.tsx       Contact form (Apps Script + mailto fallback)
 │  └─ globals.css            Design tokens (@theme): paper/ink surfaces, node palette, pop shadows
 ├─ components/
 │  ├─ layout/                Navbar (sticky, glass, active-route pill), Footer

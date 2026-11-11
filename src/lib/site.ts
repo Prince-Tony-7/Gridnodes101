@@ -17,10 +17,10 @@ export const siteConfig = {
     headshot: "/images/prince.jpg",
   },
   /**
-   * Formspree form ID (the part after https://formspree.io/f/).
-   * TODO: replace FORMSPREE_ID with your real form ID from formspree.io.
+   * Google Apps Script web app that receives contact-form enquiries.
+   * Leave empty to switch the online form off (visitors get a mailto link instead).
    */
-  formspreeId: "FORMSPREE_ID",
+  enquiryEndpoint: "https://script.google.com/macros/s/AKfycbyZL_LTYEOE5PTtNfhnNwVlNQL7xIg5auv1lmZ_xKd0qlvZXGjHQDtvDR6x17WDhJ_X/exec",
   features: {
     /** Set to true to show the Demos page in the nav and the demos section on the home page. */
     demos: false,
