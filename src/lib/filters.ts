@@ -40,7 +40,7 @@ function matchesQuery(workflow: Workflow, query: string): boolean {
  * - Search: every whitespace-separated term must match (AND).
  * - Departments: OR within the facet.
  * - Integrations: workflow must use ALL selected integrations (AND), which is
- *   what buyers expect when asking "show me HubSpot + Slack automations".
+ *   what visitors expect when asking "show me Gmail + Google Sheets automations".
  * - Complexity: single-select.
  */
 export function filterWorkflows(workflows: Workflow[], filters: WorkflowFilters): Workflow[] {

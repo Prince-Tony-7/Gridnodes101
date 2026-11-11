@@ -6,14 +6,14 @@ import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/cn";
 
 export const metadata: Metadata = {
-  title: "Book a Discovery Call",
-  description: "Tell us about your manual bottlenecks and we'll map the automation opportunity.",
+  title: "Contact",
+  description: "Tell me which repetitive admin job takes up too much of your time, and I'll tell you honestly whether it's worth automating.",
 };
 
 const steps = [
-  { title: "We read your intake", body: "Before we meet, we look at your bottleneck and the tools involved.", color: "bg-coral-tint text-coral-deep" },
-  { title: "45-minute discovery", body: "An engineer maps the process with you and sizes the opportunity.", color: "bg-sun-tint text-sun-deep" },
-  { title: "A scoped proposal", body: "Fixed scope, architecture sketch, timeline and projected ROI.", color: "bg-mint-tint text-mint-deep" },
+  { title: "I read your message", body: "I'll look at the job you describe and the tools involved, and reply within 2 working days.", color: "bg-coral-tint text-coral-deep" },
+  { title: "A free, short chat", body: "I'll ask how the job works today. If automation isn't worth it, I'll say so.", color: "bg-sun-tint text-sun-deep" },
+  { title: "A clear, fixed quote", body: "What I'll build, how long it'll take and what it costs. No surprises.", color: "bg-mint-tint text-mint-deep" },
 ];
 
 export default function ContactPage() {
@@ -23,10 +23,10 @@ export default function ContactPage() {
         <div className="space-y-10">
           <SectionHeading
             as="h1"
-            kicker="Discovery call"
+            kicker="Get in touch"
             kickerClass="bg-coral"
-            title="Let’s find where your team is losing hours."
-            description="Share the manual processes slowing your team down. We’ll review them before we meet and arrive with a draft automation plan."
+            title="What takes up too much of your time?"
+            description="Tell me about the spreadsheet, inbox or copy-paste job you’d love to stop doing. No jargon needed, and no obligation."
           />
           <ol className="space-y-4">
             {steps.map(({ title, body, color }, i) => (

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Cpu, Map as MapIcon, TrendingUp, X } from "lucide-react";
+import { CheckCircle2, Cpu, Info, Map as MapIcon, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Tabs, type TabItem } from "@/components/ui/Tabs";
@@ -12,11 +12,11 @@ import { JsonCodePanel } from "./JsonCodePanel";
 import { NodeExplainer } from "./NodeExplainer";
 import { VisualMapPlaceholder } from "./VisualMapPlaceholder";
 
-type TabId = "map" | "roi" | "specs";
+type TabId = "map" | "value" | "specs";
 
 const TABS: readonly TabItem<TabId>[] = [
   { id: "map", label: "Visual Map", icon: <MapIcon className="h-4 w-4" aria-hidden />, color: "bg-card" },
-  { id: "roi", label: "Business ROI", icon: <TrendingUp className="h-4 w-4" aria-hidden />, color: "bg-card" },
+  { id: "value", label: "What it does", icon: <CheckCircle2 className="h-4 w-4" aria-hidden />, color: "bg-card" },
   { id: "specs", label: "Technical Specs", icon: <Cpu className="h-4 w-4" aria-hidden />, color: "bg-card" },
 ];
 
@@ -109,6 +109,7 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
           <span className={cn("absolute inset-x-0 top-0 h-1", departmentColor[workflow.department].solid)} aria-hidden />
           <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap gap-2">
+              <Badge className="bg-ink text-white">Example</Badge>
               <Badge className={departmentColor[workflow.department].soft}>{workflow.department}</Badge>
               <Badge className={complexityColor[workflow.complexity]}>{workflow.complexity}</Badge>
             </div>
@@ -129,6 +130,11 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
         {/* Body */}
         <div className="scrollbar-thin overflow-y-auto px-6 py-6">
           <p className="max-w-3xl text-lg leading-relaxed text-ink-soft">{workflow.description}</p>
+          <p className="mt-4 flex max-w-3xl items-start gap-2 rounded-lg border border-line bg-card px-3 py-2 text-sm text-ink-soft">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-coral-deep" aria-hidden />
+            This is an example template showing how I&rsquo;d approach this job, not a client deployment. Every build is
+            adapted to your tools and your process.
+          </p>
           <ul className="mt-4 flex flex-wrap gap-2">
             {workflow.tags.map((t) => (
               <li key={t} className="rounded-md border border-line bg-card px-2.5 py-0.5 text-sm text-ink-soft">
@@ -150,7 +156,7 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
                 {(active, panelProps) => (
                   <div {...panelProps} className="focus:outline-none">
                     {active === "map" && <VisualMapPlaceholder nodes={workflow.nodes} />}
-                    {active === "roi" && <RoiPanel workflow={workflow} />}
+                    {active === "value" && <ValuePanel workflow={workflow} />}
                     {active === "specs" && <SpecsPanel workflow={workflow} />}
                   </div>
                 )}
@@ -167,31 +173,26 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
   );
 }
 
-const ROI_ACCENTS = ["bg-mint", "bg-sky", "bg-violet", "bg-coral"];
-
-function RoiPanel({ workflow }: { workflow: Workflow }) {
+function ValuePanel({ workflow }: { workflow: Workflow }) {
   return (
     <div className="space-y-5">
-      <p className="font-display text-xl leading-snug font-semibold text-ink">{workflow.roi.headline}</p>
-      <dl className="grid grid-cols-2 gap-3">
-        {workflow.roi.metrics.map((m, i) => (
-          <motion.div
-            key={m.label}
-            initial={{ opacity: 0, y: 12 }}
+      <p className="font-display text-xl leading-snug font-semibold text-ink">{workflow.value.headline}</p>
+      <ul className="space-y-3">
+        {workflow.value.points.map((point, i) => (
+          <motion.li
+            key={point}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 360, damping: 24, delay: i * 0.06 }}
-            className="relative flex flex-col overflow-hidden rounded-xl border border-line bg-card p-4 pl-5 shadow-pop-sm"
+            transition={{ duration: 0.3, delay: i * 0.05 }}
+            className="flex items-start gap-3 rounded-xl border border-line bg-card p-4 shadow-pop-sm"
           >
-            <span className={cn("absolute inset-y-0 left-0 w-1", ROI_ACCENTS[i % ROI_ACCENTS.length])} aria-hidden />
-            <dd className="order-1 font-display text-3xl font-semibold tracking-tight text-ink">{m.value}</dd>
-            <dt className="order-2 mt-1 text-sm font-medium text-ink-soft">
-              {m.label}
-              {m.context && <span className="block font-normal text-ink-mute">{m.context}</span>}
-            </dt>
-          </motion.div>
+            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-mint-tint text-mint-deep">
+              <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
+            </span>
+            <span className="leading-relaxed text-ink-soft">{point}</span>
+          </motion.li>
         ))}
-      </dl>
-      <p className="leading-relaxed text-ink-soft">{workflow.roi.narrative}</p>
+      </ul>
     </div>
   );
 }
@@ -200,8 +201,6 @@ function SpecsPanel({ workflow }: { workflow: Workflow }) {
   const { specs } = workflow;
   const rows: Array<[string, React.ReactNode]> = [
     ["Trigger", specs.trigger],
-    ["Avg. execution", specs.avgExecutionTime],
-    ["Throughput", specs.throughput],
     ["Error handling", specs.errorHandling],
     ["Hosting", specs.hosting],
     ["n8n version", specs.n8nVersion],

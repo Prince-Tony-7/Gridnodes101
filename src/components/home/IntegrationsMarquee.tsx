@@ -1,34 +1,29 @@
-import { INTEGRATIONS } from "@/lib/types";
+import { Reveal } from "@/components/motion/Reveal";
+import { Container } from "@/components/ui/Container";
 import { rotationDot } from "@/lib/palette";
 import { cn } from "@/lib/cn";
 
-const EXTRA = ["Airtable", "Gmail", "Salesforce", "Jira", "Shopify", "Zendesk"];
-const ITEMS = [...INTEGRATIONS, ...EXTRA];
+/** Only tools I actually use. n8n itself connects to far more. */
+const TOOLS = ["n8n", "Google Sheets", "Excel", "Gmail", "Slack", "OpenAI", "Supabase"];
 
-/** Slow, infinite ticker of the tools we connect. */
 export function IntegrationsMarquee() {
-  const row = (hidden: boolean) => (
-    <ul className="flex shrink-0 items-center gap-12 pr-12" aria-hidden={hidden || undefined}>
-      {ITEMS.map((name, i) => (
-        <li key={name} className="flex items-center gap-2.5 font-display text-lg font-medium whitespace-nowrap text-ink-soft">
-          <span className={cn("h-2 w-2 rounded-full", rotationDot[i % rotationDot.length])} aria-hidden />
-          {name}
-        </li>
-      ))}
-    </ul>
-  );
-
   return (
-    <section aria-label="Tools we integrate" className="border-y border-line bg-card py-8">
-      <p className="text-center text-xs font-semibold tracking-widest text-ink-mute uppercase">
-        Connecting the tools your teams already use
-      </p>
-      <div className="relative mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-        <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-          {row(false)}
-          {row(true)}
-        </div>
-      </div>
+    <section aria-label="Tools I work with" className="border-y border-line bg-card py-8">
+      <Container>
+        <p className="text-center text-xs font-semibold tracking-widest text-ink-mute uppercase">
+          n8n connects to 400+ apps. The ones I use most:
+        </p>
+        <Reveal y={12}>
+          <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-10">
+            {TOOLS.map((name, i) => (
+              <li key={name} className="flex items-center gap-2.5 font-display text-lg font-medium whitespace-nowrap text-ink-soft">
+                <span className={cn("h-2 w-2 rounded-full", rotationDot[i % rotationDot.length])} aria-hidden />
+                {name}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </Container>
     </section>
   );
 }

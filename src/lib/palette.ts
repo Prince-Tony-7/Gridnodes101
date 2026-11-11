@@ -25,10 +25,10 @@ const sky: Swatch = { solid: "bg-sky", tint: "bg-sky-tint", soft: "bg-sky-tint t
 const violet: Swatch = { solid: "bg-violet", tint: "bg-violet-tint", soft: "bg-violet-tint text-violet-deep", text: "text-violet-deep", hex: "var(--color-violet)" };
 
 export const departmentColor: Record<Department, Swatch> = {
-  Sales: coral,
+  Admin: coral,
   Finance: mint,
-  Marketing: pink,
-  Ops: sky,
+  Operations: sky,
+  Sales: pink,
 };
 
 export const complexityColor: Record<Complexity, string> = {

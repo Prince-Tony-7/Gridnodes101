@@ -106,9 +106,11 @@ export function DemoTheater({ demos, showFilters = false }: { demos: DemoVideo[]
                     {selected && <span className="absolute inset-y-0 left-0 w-1 bg-coral" aria-hidden />}
                     <span className="relative aspect-video w-28 shrink-0 overflow-hidden rounded-md border border-line">
                       <DemoPoster demo={d} compact />
-                      <span className="absolute right-1 bottom-1 rounded bg-ink/75 px-1 font-mono text-[10px] text-white">
-                        {d.duration}
-                      </span>
+                      {d.duration && (
+                        <span className="absolute right-1 bottom-1 rounded bg-ink/75 px-1 font-mono text-[10px] text-white">
+                          {d.duration}
+                        </span>
+                      )}
                     </span>
                     <span className="min-w-0 py-0.5">
                       <span className="line-clamp-2 text-sm leading-snug font-semibold text-ink">{d.title}</span>

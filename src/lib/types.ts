@@ -6,24 +6,14 @@
  * (see `src/lib/workflows.ts` for the repository layer).
  */
 
-export const DEPARTMENTS = ["Marketing", "Finance", "Ops", "Sales"] as const;
+export const DEPARTMENTS = ["Admin", "Finance", "Operations", "Sales"] as const;
 export type Department = (typeof DEPARTMENTS)[number];
 
 export const COMPLEXITIES = ["Basic", "Advanced"] as const;
 export type Complexity = (typeof COMPLEXITIES)[number];
 
-export const INTEGRATIONS = [
-  "HubSpot",
-  "OpenAI",
-  "Stripe",
-  "Slack",
-  "Google Sheets",
-  "Postgres",
-  "Notion",
-  "LinkedIn",
-  "Clearbit",
-  "QuickBooks",
-] as const;
+/** Tools used in the example workflows (the ones I work with day to day). */
+export const INTEGRATIONS = ["Gmail", "Google Sheets", "Excel", "Slack", "OpenAI", "Supabase"] as const;
 export type Integration = (typeof INTEGRATIONS)[number];
 
 /** Visual role of a node — drives the accent colour in the UI. */
@@ -42,17 +32,8 @@ export interface WorkflowNode {
   detail?: string;
 }
 
-export interface RoiMetric {
-  label: string;
-  value: string;
-  /** Short qualifier, e.g. "per month" or "vs. manual baseline". */
-  context?: string;
-}
-
 export interface TechnicalSpecs {
   trigger: string;
-  avgExecutionTime: string;
-  throughput: string;
   errorHandling: string;
   hosting: string;
   credentials: string[];
@@ -69,10 +50,10 @@ export interface Workflow {
   integrations: Integration[];
   tags: string[];
   nodes: WorkflowNode[];
-  roi: {
+  /** Plain-English description of what the workflow takes off someone's plate. No invented figures. */
+  value: {
     headline: string;
-    metrics: RoiMetric[];
-    narrative: string;
+    points: string[];
   };
   specs: TechnicalSpecs;
   /** Raw, importable n8n workflow JSON (pretty-printed). */
@@ -99,8 +80,8 @@ export interface DemoVideo {
   title: string;
   summary: string;
   department: Department;
-  /** e.g. "2:45" */
-  duration: string;
+  /** e.g. "2:45"; omit until the recording exists. */
+  duration?: string;
   /** Tools shown in the video. */
   integrations: string[];
   /** Steps drawn on the poster while no thumbnail is set. */

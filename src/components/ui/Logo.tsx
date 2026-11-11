@@ -46,8 +46,10 @@ export function LogoIcon({ tone = "light", className }: { tone?: "light" | "dark
 export function Logo({ tone = "light", className }: { tone?: "light" | "dark"; className?: string }) {
   const fg = tone === "dark" ? BRAND_CREAM : BRAND_GREEN;
   return (
-    <Link href="/" className={cn("group inline-flex items-center", className)} aria-label="GridNodes home">
-      <svg viewBox="0 0 888.04 192" className="h-7 w-auto" role="img" aria-hidden="true">
+    <Link href="/" className={cn("group inline-flex min-h-11 items-center", className)} title="GridNodes home">
+      {/* Real text so screen readers, link previews and text-only views read "GridNodes", not the link URL. */}
+      <span className="sr-only">GridNodes</span>
+      <svg viewBox="0 0 888.04 192" className="h-7 w-auto" aria-hidden="true" focusable="false">
         <g transform="scale(2)">
           <Mark fg={fg} animated />
         </g>

@@ -1,40 +1,26 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2, Loader2, Send } from "lucide-react";
+import { CheckCircle2, Loader2, Mail, Send } from "lucide-react";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { buttonBase, buttonStyles } from "@/components/ui/ButtonLink";
 import { cn } from "@/lib/cn";
-import {
-  BOTTLENECK_TOOLS,
-  TEAM_SIZES,
-  TIMELINES,
-  validateContact,
-  type ContactErrors,
-  type ContactPayload,
-} from "@/lib/contact";
+import { validateContact, type ContactErrors, type ContactPayload } from "@/lib/contact";
+import { siteConfig } from "@/lib/site";
 
 /**
- * The site is a static export (GitHub Pages), so the form posts straight to an
- * n8n Webhook node. Set NEXT_PUBLIC_INTAKE_WEBHOOK_URL at build time and allow
- * the site's origin in the webhook's CORS settings.
+ * GitHub Pages can't process forms, so submissions go to Formspree.
+ * Set siteConfig.formspreeId in src/lib/site.ts. Until then (or if Formspree
+ * fails) visitors are offered a mailto link instead.
  */
-const INTAKE_WEBHOOK_URL = process.env.NEXT_PUBLIC_INTAKE_WEBHOOK_URL;
+const FORMSPREE_ID: string = siteConfig.formspreeId;
+const FORMSPREE_READY = FORMSPREE_ID !== "" && FORMSPREE_ID !== "FORMSPREE_ID";
+const EMAIL = siteConfig.owner.email;
 
-const INITIAL: ContactPayload = {
-  name: "",
-  email: "",
-  company: "",
-  role: "",
-  teamSize: "",
-  timeline: TIMELINES[1],
-  tools: [],
-  bottleneck: "",
-  website: "",
-};
+const INITIAL: ContactPayload = { name: "", email: "", message: "", source: "", _gotcha: "" };
 
 const inputClass =
-  "w-full rounded-lg border bg-card px-3.5 py-2.5 text-base text-ink placeholder:text-ink-mute transition-[border-color,box-shadow] focus:border-coral focus:ring-4 focus:ring-coral/15 focus:outline-none";
+  "w-full rounded-lg border bg-card px-3.5 py-3 text-base text-ink placeholder:text-ink-mute transition-[border-color,box-shadow] focus:border-coral focus:ring-4 focus:ring-coral/15 focus:outline-none";
 
 function Field({
   id,
@@ -68,6 +54,13 @@ function Field({
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+function mailtoHref(values: ContactPayload) {
+  const body = [values.message, "", `From: ${values.name} <${values.email}>`, values.source ? `Heard about GridNodes via: ${values.source}` : ""]
+    .filter(Boolean)
+    .join("\n");
+  return `mailto:${EMAIL}?subject=${encodeURIComponent("GridNodes enquiry")}&body=${encodeURIComponent(body)}`;
+}
+
 export function ContactForm() {
   const [values, setValues] = useState<ContactPayload>(INITIAL);
   const [errors, setErrors] = useState<ContactErrors>({});
@@ -78,9 +71,6 @@ export function ContactForm() {
     setValues((v) => ({ ...v, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
   };
-
-  const toggleTool = (tool: string) =>
-    set("tools", values.tools.includes(tool) ? values.tools.filter((t) => t !== tool) : [...values.tools, tool]);
 
   const aria = (key: keyof ContactPayload) => ({
     "aria-invalid": Boolean(errors[key]) || undefined,
@@ -94,37 +84,42 @@ export function ContactForm() {
     setServerError(null);
     const found = validateContact(values);
     setErrors(found);
-    if (Object.keys(found).length > 0) {
-      const first = Object.keys(found)[0];
-      document.getElementById(first === "tools" ? "tools-group" : (first ?? ""))?.focus();
+    const first = Object.keys(found)[0];
+    if (first) {
+      document.getElementById(first)?.focus();
       return;
     }
 
-    // Bots fill the hidden honeypot field: accept silently, send nothing.
-    if (values.website) {
+    // Bots fill the hidden honeypot: pretend it worked and send nothing.
+    if (values._gotcha) {
       setStatus("success");
       return;
     }
 
-    if (!INTAKE_WEBHOOK_URL) {
-      setServerError("Online booking isn't connected yet. Please reach out to us directly in the meantime.");
+    if (!FORMSPREE_READY) {
+      setServerError("The online form isn't switched on yet.");
       setStatus("error");
       return;
     }
 
     setStatus("submitting");
     try {
-      const payload: Omit<ContactPayload, "website"> = { ...values };
-      delete (payload as Partial<ContactPayload>).website;
-      const res = await fetch(INTAKE_WEBHOOK_URL, {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString(), page: window.location.href }),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          message: values.message,
+          source: values.source,
+          _gotcha: values._gotcha,
+          _subject: `GridNodes enquiry from ${values.name}`,
+        }),
       });
-      if (!res.ok) throw new Error(`Webhook responded ${res.status}`);
+      if (!res.ok) throw new Error(`Formspree responded ${res.status}`);
       setStatus("success");
     } catch {
-      setServerError("We couldn't send that just now. Please try again in a moment.");
+      setServerError("Sorry, that didn't send.");
       setStatus("error");
     }
   }
@@ -147,10 +142,9 @@ export function ContactForm() {
           >
             <CheckCircle2 className="h-7 w-7 text-mint-deep" aria-hidden />
           </motion.span>
-          <h2 className="mt-5 text-2xl font-semibold text-ink">Thank you, we’ve received your request</h2>
+          <h2 className="mt-5 text-2xl font-semibold text-ink">Thanks, {values.name.split(" ")[0]}. Message received.</h2>
           <p className="mt-3 max-w-md text-ink-soft">
-            {values.name.split(" ")[0]}, a solutions engineer will review your bottleneck and reply to{" "}
-            <span className="font-semibold text-ink">{values.email}</span> within one business day with suggested discovery slots.
+            I&rsquo;ll reply to <span className="font-semibold text-ink">{values.email}</span> within 2 working days.
           </p>
         </motion.div>
       ) : (
@@ -160,123 +154,75 @@ export function ContactForm() {
           onSubmit={onSubmit}
           exit={{ opacity: 0 }}
           className="pop space-y-6 rounded-card bg-card p-6 sm:p-8"
+          aria-label="Contact form"
         >
-          {/* Honeypot — hidden from humans and assistive tech. */}
+          {/* Honeypot: hidden from people and assistive tech. */}
           <div className="hidden" aria-hidden>
-            <label htmlFor="website">Website</label>
-            <input
-              id="website"
-              tabIndex={-1}
-              autoComplete="off"
-              value={values.website}
-              onChange={(e) => set("website", e.target.value)}
-            />
+            <label htmlFor="_gotcha">Leave this empty</label>
+            <input id="_gotcha" name="_gotcha" tabIndex={-1} autoComplete="off" value={values._gotcha} onChange={(e) => set("_gotcha", e.target.value)} />
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field id="name" label="Full name" error={errors.name}>
-              <input id="name" autoComplete="name" className={cn(inputClass, borderFor("name"))} value={values.name} onChange={(e) => set("name", e.target.value)} {...aria("name")} />
+            <Field id="name" label="Name" error={errors.name}>
+              <input id="name" name="name" autoComplete="name" className={cn(inputClass, borderFor("name"))} value={values.name} onChange={(e) => set("name", e.target.value)} {...aria("name")} />
             </Field>
-            <Field id="email" label="Work email" error={errors.email}>
-              <input id="email" type="email" autoComplete="email" className={cn(inputClass, borderFor("email"))} value={values.email} onChange={(e) => set("email", e.target.value)} {...aria("email")} />
-            </Field>
-            <Field id="company" label="Company" error={errors.company}>
-              <input id="company" autoComplete="organization" className={cn(inputClass, borderFor("company"))} value={values.company} onChange={(e) => set("company", e.target.value)} {...aria("company")} />
-            </Field>
-            <Field id="role" label="Role" hint="Optional">
-              <input id="role" autoComplete="organization-title" className={cn(inputClass, "border-line-strong")} value={values.role} onChange={(e) => set("role", e.target.value)} />
-            </Field>
-            <Field id="teamSize" label="Company size" error={errors.teamSize}>
-              <select id="teamSize" className={cn(inputClass, borderFor("teamSize"))} value={values.teamSize} onChange={(e) => set("teamSize", e.target.value)} {...aria("teamSize")}>
-                <option value="" disabled>
-                  Select…
-                </option>
-                {TEAM_SIZES.map((s) => (
-                  <option key={s} value={s}>
-                    {s} employees
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field id="timeline" label="Timeline">
-              <select id="timeline" className={cn(inputClass, "border-line-strong")} value={values.timeline} onChange={(e) => set("timeline", e.target.value)}>
-                {TIMELINES.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
+            <Field id="email" label="Email" error={errors.email}>
+              <input id="email" name="email" type="email" autoComplete="email" inputMode="email" className={cn(inputClass, borderFor("email"))} value={values.email} onChange={(e) => set("email", e.target.value)} {...aria("email")} />
             </Field>
           </div>
 
-          <fieldset
-            id="tools-group"
-            tabIndex={-1}
-            aria-describedby={errors.tools ? "tools-error" : undefined}
-            className="space-y-3 focus:outline-none"
-          >
-            <legend className="text-sm font-medium text-ink">Where does manual work pile up today?</legend>
-            <div className="flex flex-wrap gap-2">
-              {BOTTLENECK_TOOLS.map((tool) => {
-                const checked = values.tools.includes(tool);
-                return (
-                  <label
-                    key={tool}
-                    className={cn(
-                      "cursor-pointer rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-150 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-coral",
-                      checked ? "border-coral bg-coral-tint text-coral-deep" : "border-line-strong bg-card text-ink-soft hover:border-ink-mute hover:text-ink",
-                    )}
-                  >
-                    <input type="checkbox" className="sr-only" checked={checked} onChange={() => toggleTool(tool)} />
-                    {tool}
-                  </label>
-                );
-              })}
-            </div>
-            {errors.tools && (
-              <p id="tools-error" className="text-sm font-medium text-danger">
-                {errors.tools}
-              </p>
-            )}
-          </fieldset>
-
           <Field
-            id="bottleneck"
-            label="Describe your biggest manual bottleneck"
-            error={errors.bottleneck}
-            hint="Which tools are involved, who does the work, and roughly how many hours per week?"
+            id="message"
+            label="What takes up too much of your time?"
+            error={errors.message}
+            hint="For example: which spreadsheets, emails or tools are involved, and who does the work."
           >
             <textarea
-              id="bottleneck"
-              rows={5}
-              className={cn(inputClass, "resize-y", borderFor("bottleneck"))}
-              placeholder="e.g. Our finance team exports Stripe payouts to Excel every Monday and matches them against QuickBooks by hand — ~6 hrs/week…"
-              value={values.bottleneck}
-              onChange={(e) => set("bottleneck", e.target.value)}
-              {...aria("bottleneck")}
+              id="message"
+              name="message"
+              rows={6}
+              className={cn(inputClass, "resize-y", borderFor("message"))}
+              placeholder="e.g. Every month I export our client list from the accounts system and build a billing sheet for each client by hand…"
+              value={values.message}
+              onChange={(e) => set("message", e.target.value)}
+              {...aria("message")}
             />
           </Field>
 
+          <Field id="source" label="How did you hear about GridNodes? (optional)" error={errors.source}>
+            <input id="source" name="source" className={cn(inputClass, borderFor("source"))} value={values.source} onChange={(e) => set("source", e.target.value)} {...aria("source")} />
+          </Field>
+
           {serverError && (
-            <p role="alert" className="rounded-lg border border-danger/30 bg-coral-tint px-4 py-2.5 text-sm font-medium text-coral-deep">
-              {serverError}
-            </p>
+            <div role="alert" className="rounded-lg border border-danger/30 bg-coral-tint px-4 py-3 text-sm text-coral-deep">
+              <p className="font-medium">{serverError}</p>
+              <p className="mt-1">
+                You can email me directly instead:{" "}
+                <a href={mailtoHref(values)} className="font-semibold underline underline-offset-2">
+                  {EMAIL}
+                </a>{" "}
+                (your message will be copied into the email).
+              </p>
+            </div>
           )}
 
           <div className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-ink-mute">We reply within one business day.</p>
-            <button
-              type="submit"
-              disabled={status === "submitting"}
-              className={cn(buttonBase, buttonStyles.primary, "w-full sm:w-auto")}
-            >
+            <p className="text-sm text-ink-mute">
+              I&rsquo;ll reply within 2 working days.
+              <br />
+              Prefer email?{" "}
+              <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-1 font-medium text-ink underline decoration-line-strong underline-offset-2 hover:decoration-ink">
+                <Mail className="h-3.5 w-3.5" aria-hidden /> {EMAIL}
+              </a>
+            </p>
+            <button type="submit" disabled={status === "submitting"} className={cn(buttonBase, buttonStyles.primary, "w-full py-3 sm:w-auto")}>
               {status === "submitting" ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Sending…
                 </>
               ) : (
                 <>
-                  Request Discovery Call <Send className="h-4 w-4" aria-hidden />
+                  Send message <Send className="h-4 w-4" aria-hidden />
                 </>
               )}
             </button>

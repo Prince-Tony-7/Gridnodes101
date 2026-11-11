@@ -9,7 +9,7 @@ import { buttonBase, buttonStyles } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
-import { siteConfig } from "@/lib/site";
+import { navItems } from "@/lib/site";
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -46,7 +46,7 @@ export function Navbar() {
 
         <nav aria-label="Primary" className="hidden md:block">
           <ul className="flex items-center gap-1">
-            {siteConfig.nav.map((item) => {
+            {navItems.map((item) => {
               const active = isActive(pathname, item.href);
               return (
                 <li key={item.href} className="relative">
@@ -75,7 +75,7 @@ export function Navbar() {
 
         <div className="hidden md:block">
           <Link href="/contact" className={cn(buttonBase, buttonStyles.primary, "px-4 py-2")}>
-            Book a call <ArrowUpRight className="h-4 w-4" aria-hidden />
+            Get in touch <ArrowUpRight className="h-4 w-4" aria-hidden />
           </Link>
         </div>
 
@@ -103,7 +103,7 @@ export function Navbar() {
             className="overflow-hidden md:hidden"
           >
             <Container className="flex flex-col gap-2 pt-1 pb-4">
-              {siteConfig.nav.map((item) => {
+              {navItems.map((item) => {
                 const active = isActive(pathname, item.href);
                 return (
                   <Link

@@ -1,8 +1,10 @@
 # GridNodes
 
-Portfolio site showcasing production-ready **n8n** automation workflows for enterprise clients.
+Website for GridNodes: **n8n** workflow automation for Irish small businesses, built by Prince Tony in Dublin.
 
-**Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Framer Motion · Lucide React · Bricolage Grotesque + DM Sans + JetBrains Mono
+**Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Framer Motion · Lucide React · Inter Tight + DM Sans + JetBrains Mono
+
+Personal details, the Formspree ID and feature switches all live in `src/lib/site.ts`.
 
 ## Getting started
 
@@ -25,12 +27,13 @@ The site is then published at `https://<owner>.github.io/<repo>/`.
 
 ## Contact form
 
-GitHub Pages can't run server code, so the discovery form posts directly to an
-**n8n Webhook node**. Add a repository variable (**Settings → Secrets and variables →
-Actions → Variables**) named `INTAKE_WEBHOOK_URL` with your webhook's production URL,
-and allow the site's origin in the Webhook node's CORS ("Allowed Origins") option.
-Without it, the form shows a "not connected yet" message instead of submitting.
-For local dev, set `NEXT_PUBLIC_INTAKE_WEBHOOK_URL` in `.env.local`.
+GitHub Pages can't process forms, so the contact form posts to **Formspree**.
+
+1. Create a free form at [formspree.io](https://formspree.io) using the email address you want enquiries sent to.
+2. Copy the form ID (the part after `https://formspree.io/f/`).
+3. Replace `FORMSPREE_ID` with it in `src/lib/site.ts` (`formspreeId`).
+
+Until then, the form validates input and then offers a pre-filled `mailto:` link instead of sending.
 
 ## Brand
 
@@ -48,7 +51,9 @@ Brand assets live in `public/brand/` (light/dark logo and icon, plus the avatar 
 
 ## Demo videos
 
-Demo recordings live in `src/data/demosData.ts` and appear on `/demos` and the home page. To publish one, set `source` on its entry:
+The Demos page and home-page demos section are **switched off** until recordings exist. To switch them on, set `features.demos: true` in `src/lib/site.ts`. That adds "Demos" to the navigation and footer, shows the home-page section, and publishes `/demos`.
+
+Demo recordings live in `src/data/demosData.ts`. To publish one, set `source` on its entry:
 
 | Host | `source` value |
 | --- | --- |
@@ -59,23 +64,34 @@ Demo recordings live in `src/data/demosData.ts` and appear on `/demos` and the h
 
 Add `poster: "/videos/my-demo.jpg"` for a custom thumbnail. Entries without a `source` show a "Recording coming soon" poster. Players load only when a visitor presses play. Prefer YouTube, Vimeo or Loom for anything over a few MB: GitHub limits file sizes and Pages is not built for video streaming.
 
+## Headshot and case study
+
+- **Headshot:** add your photo as `public/images/prince.jpg`. A neutral placeholder shows until the file exists.
+- **Case study figures:** fill in `RESULT_TIME` in `src/components/home/CaseStudy.tsx` with measured before/after times. The time panel only appears when both are set.
+
 ## Structure
 
 ```
 src/
 ├─ app/
-│  ├─ page.tsx               Home: hero, metrics ribbon, featured workflows
-│  ├─ showroom/page.tsx      Searchable / filterable gallery (deep links: ?workflow=<slug>)
-│  ├─ contact/page.tsx       Enterprise discovery intake
+│  ├─ page.tsx               Home: hero, tools, services, case study, examples, process, about
+│  ├─ showroom/page.tsx      Example workflows, filterable (deep links: ?workflow=<slug>)
+│  ├─ about/page.tsx         About Prince Tony
+│  ├─ demos/page.tsx         Demo videos (behind features.demos)
+│  ├─ contact/page.tsx       Contact form (Formspree + mailto fallback)
 │  └─ globals.css            Design tokens (@theme): paper/ink surfaces, node palette, pop shadows
 ├─ components/
 │  ├─ layout/                Navbar (sticky, glass, active-route pill), Footer
-│  ├─ home/                  Hero, HeroGraph (live node graph), IntegrationsMarquee, MetricsRibbon, ValueProps
+│  ├─ home/                  Hero, HeroGraph (illustration), IntegrationsMarquee (tools strip), Services,
+│  │                         CaseStudy, ProcessTimeline, ValueProps, AboutTeaser
+│  ├─ about/                 Headshot, ContactLinks
+│  ├─ demos/                 DemoTheater, VideoPlayer, DemoPoster
 │  ├─ showroom/              FilterBar, WorkflowCard, ShowroomGallery, WorkflowDetailModal,
 │  │                         NodeExplainer, VisualMapPlaceholder, JsonCodePanel
 │  ├─ contact/               ContactForm
 │  └─ ui/                    Badge, ButtonLink, CodeBlock, Container, Logo, SectionHeading, Tabs
-├─ data/workflowsData.ts     Mock database (3 workflows + global metrics)
+├─ data/workflowsData.ts     3 example workflows (templates, not client work)
+├─ data/demosData.ts        Demo video entries
 ├─ hooks/                    useWorkflowFilters, useCopyToClipboard
 └─ lib/                      types, palette (department/node colours), workflows (repository layer), filters, JSON highlighter, contact schema
 ```

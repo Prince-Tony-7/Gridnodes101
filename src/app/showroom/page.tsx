@@ -6,8 +6,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getAllWorkflows } from "@/lib/workflows";
 
 export const metadata: Metadata = {
-  title: "Automation Showroom",
-  description: "Search and filter production n8n workflows by department, integration and complexity.",
+  title: "Example Workflows",
+  description: "Example n8n workflows for small-business admin: client intake, spreadsheet reporting and invoice reminders. Templates, not client deployments.",
 };
 
 export default async function ShowroomPage() {
@@ -17,10 +17,10 @@ export default async function ShowroomPage() {
     <Container className="pt-14 pb-8">
       <SectionHeading
         as="h1"
-        kicker="Showroom"
+        kicker="Examples"
         kickerClass="bg-coral"
-        title="Automation workflow library."
-        description="Filter by team, integration or complexity. Each workflow includes a node-by-node breakdown, business impact and importable n8n JSON."
+        title="Example workflows."
+        description="Templates that show how I approach common small-business admin. They’re examples, not client deployments. Each one has a step-by-step breakdown and n8n JSON you can import."
       />
       <div className="mt-10">
         {/* useSearchParams (deep-linked modal) requires a Suspense boundary for static rendering. */}

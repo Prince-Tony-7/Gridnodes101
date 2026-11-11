@@ -93,7 +93,7 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
             <SearchX className="h-6 w-6" />
           </span>
           <p className="mt-4 font-display text-xl font-semibold text-ink">No workflows match these filters.</p>
-          <p className="mt-1 text-ink-soft">Try removing a filter, or tell us what you need and we&rsquo;ll scope it.</p>
+          <p className="mt-1 text-ink-soft">Try removing a filter, or tell me what you need and I&rsquo;ll scope it.</p>
           <button
             type="button"
             onClick={f.reset}

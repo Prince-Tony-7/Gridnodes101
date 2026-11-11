@@ -39,7 +39,6 @@ function NodeStrip({ workflow }: { workflow: Workflow }) {
 }
 
 function CardBody({ workflow }: { workflow: Workflow }) {
-  const metric = workflow.roi.metrics[0];
   const dept = departmentColor[workflow.department];
 
   return (
@@ -54,6 +53,7 @@ function CardBody({ workflow }: { workflow: Workflow }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
+          <Badge className="bg-ink text-white">Example</Badge>
           <Badge className={dept.soft}>{workflow.department}</Badge>
           <Badge className={complexityColor[workflow.complexity]}>{workflow.complexity}</Badge>
         </div>
@@ -65,15 +65,9 @@ function CardBody({ workflow }: { workflow: Workflow }) {
           {workflow.integrations.join(" · ")}
         </p>
 
-        {metric && (
-          <div className={"mt-auto flex items-baseline gap-2 border-t border-line pt-4"}>
-            <span className="font-display text-2xl font-semibold tracking-tight text-ink">{metric.value}</span>
-            <span className="text-sm leading-tight font-medium text-ink-soft">
-              {metric.label.toLowerCase()}
-              {metric.context ? ` ${metric.context}` : ""}
-            </span>
-          </div>
-        )}
+        <p className="mt-auto flex items-center gap-1.5 border-t border-line pt-4 text-sm font-semibold text-ink">
+          See how it works <ArrowUpRight className="h-4 w-4" aria-hidden />
+        </p>
       </div>
     </>
   );

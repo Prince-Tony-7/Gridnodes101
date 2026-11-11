@@ -1,13 +1,12 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Bot, Database, GitBranch, MessageSquare, Webhook, type LucideIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { FileSpreadsheet, GitBranch, Mail, MailCheck, ScanText, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 /**
- * Decorative "live" workflow: data packets travel along the wires of a small
- * lead-routing graph. Coordinates live in a 520×360 space shared by the SVG
+ * Illustration of a small admin workflow (not live data): packets travel
+ * along the wires of an email-to-spreadsheet graph. Coordinates live in a 520×360 space shared by the SVG
  * wires and the absolutely positioned HTML nodes.
  */
 
@@ -26,11 +25,11 @@ interface GraphNode {
 }
 
 const NODES: GraphNode[] = [
-  { id: "hook", label: "Webhook", icon: Webhook, x: 76, y: 180, fill: "bg-coral-tint text-coral-deep", color: "var(--color-coral)" },
-  { id: "ai", label: "AI score", icon: Bot, x: 215, y: 90, fill: "bg-pink-tint text-pink-deep", color: "var(--color-pink)" },
-  { id: "route", label: "Route", icon: GitBranch, x: 290, y: 250, fill: "bg-violet-tint text-violet-deep", color: "var(--color-violet)" },
-  { id: "crm", label: "HubSpot", icon: Database, x: 440, y: 120, fill: "bg-sky-tint text-sky-deep", color: "var(--color-sky)" },
-  { id: "slack", label: "Slack", icon: MessageSquare, x: 440, y: 285, fill: "bg-mint-tint text-mint-deep", color: "var(--color-mint)" },
+  { id: "hook", label: "Gmail", icon: Mail, x: 76, y: 180, fill: "bg-coral-tint text-coral-deep", color: "var(--color-coral)" },
+  { id: "ai", label: "Extract", icon: ScanText, x: 215, y: 90, fill: "bg-pink-tint text-pink-deep", color: "var(--color-pink)" },
+  { id: "route", label: "Check", icon: GitBranch, x: 290, y: 250, fill: "bg-violet-tint text-violet-deep", color: "var(--color-violet)" },
+  { id: "crm", label: "Sheets", icon: FileSpreadsheet, x: 440, y: 120, fill: "bg-sky-tint text-sky-deep", color: "var(--color-sky)" },
+  { id: "slack", label: "Reply", icon: MailCheck, x: 440, y: 285, fill: "bg-mint-tint text-mint-deep", color: "var(--color-mint)" },
 ];
 
 const EDGES: Array<[string, string]> = [
@@ -53,13 +52,6 @@ function wire(fromId: string, toId: string) {
 
 export function HeroGraph() {
   const reduce = useReducedMotion();
-  const [runs, setRuns] = useState(1284);
-
-  useEffect(() => {
-    if (reduce) return;
-    const id = setInterval(() => setRuns((r) => r + 1), 1400);
-    return () => clearInterval(id);
-  }, [reduce]);
 
   return (
     <div className="pop relative overflow-hidden rounded-card bg-card">
@@ -70,7 +62,7 @@ export function HeroGraph() {
           <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
           <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
         </div>
-        <span className="font-mono text-xs text-ink-mute">lead-router.json</span>
+        <span className="font-mono text-xs text-ink-mute">example-workflow</span>
         <span className="w-12" aria-hidden />
       </div>
 
@@ -134,18 +126,6 @@ export function HeroGraph() {
         })}
       </div>
 
-      <div className="flex items-center justify-between border-t border-line px-4 py-2.5 text-xs font-medium text-ink-soft">
-        <span className="inline-flex items-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-mint" />
-          </span>
-          Active
-        </span>
-        <span className="font-mono tabular-nums text-ink-soft">
-          {runs.toLocaleString("en-US")} runs today
-        </span>
-      </div>
     </div>
   );
 }

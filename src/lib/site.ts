@@ -1,12 +1,42 @@
+/**
+ * Site-wide settings. Personal details, contact options and feature switches
+ * all live here so they can be changed in one place.
+ */
 export const siteConfig = {
   name: "GridNodes",
-  title: "GridNodes — Production-Ready n8n Automations for Scale",
+  title: "GridNodes | Workflow automation for Irish small businesses",
   description:
-    "Enterprise-grade n8n automation workflows for Marketing, Finance and Operations. Explore production samples with ROI metrics, technical specs and importable JSON.",
+    "I build n8n automations for Irish small businesses that take the repetitive admin off your plate: client intake, spreadsheet reporting, invoicing, email triage and documents.",
+  owner: {
+    name: "Prince Tony",
+    role: "Manufacturing Process Engineer and automation builder",
+    email: "princetony1208@gmail.com",
+    linkedin: "https://linkedin.com/in/prince-tony-a0580a1a1",
+    location: "Dublin, Ireland",
+    /** Put the photo at public/images/prince.jpg; a placeholder shows until then. */
+    headshot: "/images/prince.jpg",
+  },
+  /**
+   * Formspree form ID (the part after https://formspree.io/f/).
+   * TODO: replace FORMSPREE_ID with your real form ID from formspree.io.
+   */
+  formspreeId: "FORMSPREE_ID",
+  features: {
+    /** Set to true to show the Demos page in the nav and the demos section on the home page. */
+    demos: false,
+  },
   nav: [
     { label: "Home", href: "/" },
-    { label: "Showroom", href: "/showroom" },
-    { label: "Demos", href: "/demos" },
+    { label: "Examples", href: "/showroom" },
+    { label: "Demos", href: "/demos", feature: "demos" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
 } as const;
+
+type NavItem = (typeof siteConfig.nav)[number];
+
+/** Nav items with disabled features filtered out. */
+export const navItems = siteConfig.nav.filter(
+  (item: NavItem) => !("feature" in item) || siteConfig.features[item.feature],
+);

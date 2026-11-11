@@ -13,9 +13,17 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   // Absolute base for share-image URLs. Set SITE_URL when moving to a custom domain.
   metadataBase: new URL(process.env.SITE_URL ?? "https://prince-tony-7.github.io"),
-  title: { default: siteConfig.title, template: `%s · ${siteConfig.name}` },
+  title: { default: siteConfig.title, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
-  openGraph: { title: siteConfig.title, description: siteConfig.description, type: "website" },
+  authors: [{ name: siteConfig.owner.name, url: siteConfig.owner.linkedin }],
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    locale: "en_IE",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: siteConfig.title, description: siteConfig.description },
 };
 
 export const viewport: Viewport = {

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
-import { siteConfig } from "@/lib/site";
+import { navItems, siteConfig } from "@/lib/site";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -19,16 +19,16 @@ export function Footer() {
             </p>
             <Link
               href="/contact"
-              className="group mt-6 inline-flex items-center gap-2 font-display text-lg font-medium text-paper underline decoration-paper/30 underline-offset-8 transition-colors hover:decoration-paper"
+              className="group mt-6 inline-flex min-h-11 items-center gap-2 font-display text-lg font-medium text-paper underline decoration-paper/30 underline-offset-8 transition-colors hover:decoration-paper"
             >
-              Let’s scope the automation
+              Tell me what takes up your time
               <ArrowUpRight className="h-5 w-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden />
             </Link>
           </Reveal>
 
-          <nav aria-label="Footer" className="flex gap-6 text-sm font-medium">
-            {siteConfig.nav.map((item) => (
-              <Link key={item.href} href={item.href} className="text-paper/70 transition-colors hover:text-paper">
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-1 text-sm font-medium">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="inline-flex min-h-11 items-center text-paper/70 transition-colors hover:text-paper">
                 {item.label}
               </Link>
             ))}
@@ -36,8 +36,17 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-2 border-t border-paper/15 pt-6 text-xs text-paper/50 sm:flex-row sm:justify-between">
-          <p>© {year} GridNodes</p>
-          <p>n8n automation design, build and support.</p>
+          <p>
+            © {year} GridNodes · {siteConfig.owner.name} · {siteConfig.owner.location}
+          </p>
+          <p className="flex flex-wrap gap-x-4 gap-y-1">
+            <a href={`mailto:${siteConfig.owner.email}`} className="inline-flex min-h-11 items-center hover:text-paper">
+              {siteConfig.owner.email}
+            </a>
+            <a href={siteConfig.owner.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-paper">
+              LinkedIn
+            </a>
+          </p>
         </div>
       </Container>
     </footer>

@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { DemoTheater } from "@/components/demos/DemoTheater";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getAllDemos } from "@/lib/demos";
+import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Demo Videos",
-  description: "Watch GridNodes n8n automations running end to end, from trigger to outcome.",
+  description: "Screen recordings of GridNodes example automations running end to end.",
 };
 
 export default async function DemosPage() {
+  // Hidden until recordings exist: set siteConfig.features.demos = true in src/lib/site.ts.
+  if (!siteConfig.features.demos) notFound();
   const demos = await getAllDemos();
   return (
     <Container className="pt-14 pb-8">

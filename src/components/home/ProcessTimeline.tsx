@@ -19,34 +19,34 @@ interface Step {
 const STEPS: Step[] = [
   {
     icon: FileSearch,
-    week: "Week 1",
-    title: "Discovery and baseline",
-    body: "We map the current process with the people who run it, measure how long it really takes and agree on the success metric.",
-    deliverables: ["Process map", "Baseline metrics", "Fixed-scope proposal"],
+    week: "Step 1 · Free chat",
+    title: "Understand the job",
+    body: "A short call about the task that eats your time: what happens, who does it and which tools are involved. I'll tell you honestly if automation is worth it.",
+    deliverables: ["Process sketch", "Fixed quote", "Time estimate"],
     accent: "bg-coral",
   },
   {
     icon: Hammer,
-    week: "Weeks 2–3",
-    title: "Build in a staging workspace",
-    body: "Workflows are built against sandbox credentials, with every node named, documented and versioned in Git.",
-    deliverables: ["n8n workflows", "Test fixtures", "Weekly demo"],
+    week: "Step 2 · Build",
+    title: "Build and test with your real files",
+    body: "I build the workflow and test it against copies of your real spreadsheets and emails, and you see it working before anything goes live.",
+    deliverables: ["Working workflow", "Test run", "Your feedback"],
     accent: "bg-violet",
   },
   {
     icon: ShieldCheck,
-    week: "Week 4",
-    title: "Harden and launch",
-    body: "Error workflows, retries, idempotency keys and alerting go in before anything touches production data.",
-    deliverables: ["Error handling", "Monitoring", "Go-live checklist"],
+    week: "Step 3 · Go live",
+    title: "Switch it on safely",
+    body: "Error alerts go in before launch, so if something breaks you hear about it straight away. It runs side by side with the old way until you're happy.",
+    deliverables: ["Error alerts", "Go-live check", "Side-by-side run"],
     accent: "bg-sky",
   },
   {
     icon: LifeBuoy,
-    week: "Ongoing",
-    title: "Hand over and support",
-    body: "Your team gets a runbook and a walkthrough. We report ROI against the baseline and stay on call if you want us.",
-    deliverables: ["Runbook", "ROI report", "Optional support plan"],
+    week: "Step 4 · Hand over",
+    title: "It's yours",
+    body: "You get plain-English documentation and a walkthrough. The workflow belongs to you, and I'm around for changes or fixes if you want me.",
+    deliverables: ["Documentation", "Walkthrough", "Optional support"],
     accent: "bg-mint",
   },
 ];
@@ -85,11 +85,11 @@ export function ProcessTimeline() {
       <Container className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading
-            kicker="How we deliver"
+            kicker="How it works"
             kickerClass="bg-coral"
             tone="dark"
-            title="From first call to production in four weeks."
-            description="A fixed, transparent process. You see working automations every week, and nothing goes live without error handling and monitoring in place."
+            title="From first chat to working automation in 1–4 weeks."
+            description="Most small jobs take a week or two; bigger ones up to four, depending on scope. You see it working before it goes live, and nothing launches without error alerts."
           />
           <div className="mt-8 hidden items-center gap-3 text-sm text-white/50 lg:flex" aria-hidden>
             <span className="font-mono tabular-nums">

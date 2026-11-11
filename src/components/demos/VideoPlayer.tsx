@@ -78,10 +78,12 @@ export function VideoPlayer({ demo }: { demo: DemoVideo }) {
             )}
           </span>
 
+{demo.duration && (
           <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-md bg-ink/75 px-2 py-1 font-mono text-xs text-white backdrop-blur sm:bottom-4 sm:left-4">
             <Clock className="h-3 w-3" aria-hidden />
             {demo.duration}
           </span>
+          )}
         </button>
       )}
     </div>

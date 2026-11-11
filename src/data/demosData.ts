@@ -2,96 +2,62 @@ import type { DemoVideo } from "@/lib/types";
 
 /**
  * Demo recordings shown on /demos and the home page.
+ * The Demos feature is switched off in src/lib/site.ts (features.demos) until
+ * recordings exist.
  *
  * To publish a recording, set `source` on its entry:
  *   YouTube: { kind: "youtube", id: "dQw4w9WgXcQ" }   (the part after ?v=)
  *   Vimeo:   { kind: "vimeo",   id: "76979871" }
  *   Loom:    { kind: "loom",    id: "abc123..." }      (the part after /share/)
- *   File:    { kind: "file",    src: "/videos/lead-router.mp4" }  (put the file in public/videos/)
- * Optionally add `poster: "/videos/lead-router.jpg"` for a custom thumbnail.
+ *   File:    { kind: "file",    src: "/videos/client-intake.mp4" }  (put the file in public/videos/)
+ * Optionally add `poster: "/videos/client-intake.jpg"` for a custom thumbnail.
  * Entries without a `source` show a "Recording coming soon" poster.
  */
 export const demosData: DemoVideo[] = [
   {
-    slug: "ai-lead-scoring-demo",
-    title: "AI lead scoring and CRM routing",
+    slug: "new-client-intake-demo",
+    title: "New client intake",
     summary:
-      "A form submission is enriched, scored by an LLM against the ICP and routed into HubSpot, with a Slack alert for hot leads, in under ten seconds.",
-    department: "Sales",
-    duration: "3:10",
-    integrations: ["HubSpot", "OpenAI", "Clearbit", "Slack"],
+      "A website enquiry is tidied up, checked against the client list, added to Google Sheets and answered with a welcome email.",
+    department: "Admin",
+    integrations: ["Gmail", "Google Sheets"],
     steps: [
-      { label: "Webhook", kind: "trigger" },
-      { label: "Enrich", kind: "action" },
-      { label: "AI score", kind: "ai" },
-      { label: "Route", kind: "logic" },
-      { label: "HubSpot", kind: "output" },
+      { label: "Enquiry", kind: "trigger" },
+      { label: "Tidy up", kind: "logic" },
+      { label: "Sheets", kind: "action" },
+      { label: "Welcome", kind: "output" },
     ],
-    workflowSlug: "ai-lead-scoring-crm-router",
+    workflowSlug: "new-client-intake",
   },
   {
-    slug: "stripe-reconciliation-demo",
-    title: "Stripe payout reconciliation",
+    slug: "daily-exception-report-demo",
+    title: "Daily exception report from a spreadsheet",
     summary:
-      "Nightly matching of Stripe payouts against the ledger in Postgres. Exceptions land in Slack with everything finance needs to resolve them.",
+      "An Excel export arrives by email, every row is checked against agreed rules and only the problem rows are logged and emailed.",
+    department: "Operations",
+    integrations: ["Gmail", "Excel", "Google Sheets"],
+    steps: [
+      { label: "Export", kind: "trigger" },
+      { label: "Read", kind: "action" },
+      { label: "Check", kind: "logic" },
+      { label: "Log", kind: "action" },
+      { label: "Email", kind: "output" },
+    ],
+    workflowSlug: "daily-exception-report",
+  },
+  {
+    slug: "overdue-invoice-reminders-demo",
+    title: "Overdue invoice reminders",
+    summary:
+      "Each weekday morning, overdue invoices are found in a Google Sheet and polite reminders go out from Gmail.",
     department: "Finance",
-    duration: "2:45",
-    integrations: ["Stripe", "Postgres", "Slack", "Google Sheets"],
+    integrations: ["Google Sheets", "Gmail"],
     steps: [
       { label: "Schedule", kind: "trigger" },
-      { label: "Stripe", kind: "action" },
-      { label: "Match", kind: "logic" },
-      { label: "Ledger", kind: "action" },
-      { label: "Slack", kind: "output" },
+      { label: "Invoices", kind: "action" },
+      { label: "Overdue?", kind: "logic" },
+      { label: "Remind", kind: "output" },
     ],
-    workflowSlug: "stripe-reconciliation-slack",
-  },
-  {
-    slug: "content-repurposer-demo",
-    title: "Multi-channel content repurposing",
-    summary:
-      "One long-form article in Notion becomes on-brand LinkedIn, X and newsletter drafts, queued for review in a single run.",
-    department: "Marketing",
-    duration: "2:20",
-    integrations: ["Notion", "OpenAI", "LinkedIn", "Slack"],
-    steps: [
-      { label: "Notion", kind: "trigger" },
-      { label: "Draft", kind: "ai" },
-      { label: "Split", kind: "logic" },
-      { label: "Review", kind: "action" },
-      { label: "Publish", kind: "output" },
-    ],
-    workflowSlug: "multi-channel-content-repurposer",
-  },
-  {
-    slug: "invoice-capture-demo",
-    title: "Invoice capture to QuickBooks",
-    summary:
-      "Invoices arriving by email are read with AI, validated against purchase orders and posted to QuickBooks as draft bills.",
-    department: "Finance",
-    duration: "2:05",
-    integrations: ["Gmail", "OpenAI", "QuickBooks"],
-    steps: [
-      { label: "Inbox", kind: "trigger" },
-      { label: "Extract", kind: "ai" },
-      { label: "Validate", kind: "logic" },
-      { label: "QuickBooks", kind: "output" },
-    ],
-  },
-  {
-    slug: "support-triage-demo",
-    title: "Support ticket triage",
-    summary:
-      "New tickets are classified by intent and urgency, tagged, assigned to the right queue and escalated to on-call when an SLA is at risk.",
-    department: "Ops",
-    duration: "1:55",
-    integrations: ["Zendesk", "OpenAI", "Slack"],
-    steps: [
-      { label: "New ticket", kind: "trigger" },
-      { label: "Classify", kind: "ai" },
-      { label: "SLA check", kind: "logic" },
-      { label: "Assign", kind: "action" },
-      { label: "Escalate", kind: "output" },
-    ],
+    workflowSlug: "overdue-invoice-reminders",
   },
 ];

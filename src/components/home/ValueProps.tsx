@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code2, Gauge, LineChart, ShieldCheck } from "lucide-react";
+import { BellRing, FileText, KeyRound, Unlock } from "lucide-react";
 import { Tilt } from "@/components/motion/Tilt";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -9,30 +9,30 @@ import { cn } from "@/lib/cn";
 
 const props = [
   {
-    icon: ShieldCheck,
-    title: "Fails loudly, never silently",
-    body: "Every build ships with a global error workflow, retries with backoff and idempotent writes. When something fails, your team is alerted immediately and nothing is processed twice.",
+    icon: BellRing,
+    title: "Nothing fails silently",
+    body: "Every workflow includes an error alert. If a step fails, you get an email saying what went wrong, instead of finding out weeks later.",
     className: "lg:col-span-2",
     iconBg: "bg-coral-tint text-coral-deep",
   },
   {
-    icon: Gauge,
-    title: "Built for peak volume",
-    body: "Queue-mode n8n, horizontal workers, rate-limit aware batching.",
+    icon: FileText,
+    title: "Documented and handed over",
+    body: "Plain-English notes for every step, and a walkthrough when it goes live.",
     className: "",
     iconBg: "bg-sky-tint text-sky-deep",
   },
   {
-    icon: LineChart,
-    title: "Measurable ROI",
-    body: "We measure the manual baseline first, then report hours and errors saved.",
+    icon: KeyRound,
+    title: "You own it",
+    body: "The workflows run on your own n8n account or server. The files are yours.",
     className: "",
     iconBg: "bg-sun-tint text-sun-deep",
   },
   {
-    icon: Code2,
-    title: "You own everything",
-    body: "Version-controlled JSON, documented nodes and a handover runbook. No black boxes and no vendor lock-in.",
+    icon: Unlock,
+    title: "No lock-in",
+    body: "No long contracts or retainers you can't leave. If you'd rather maintain it yourself, or hand it to someone else later, you can.",
     className: "lg:col-span-2",
     iconBg: "bg-mint-tint text-mint-deep",
   },
@@ -43,10 +43,10 @@ export function ValueProps() {
     <section className="py-24">
       <Container>
         <SectionHeading
-          kicker="How we build"
+          kicker="How I build"
           kickerClass="bg-coral"
-          title="Low-code tooling. Software engineering standards."
-          description="Every workflow is built, tested and handed over like production software, because for your business it is."
+          title="Simple, reliable and yours."
+          description="The same discipline I use in regulated manufacturing: documented, tested and built so problems get noticed."
         />
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           {props.map(({ icon: Icon, title, body, className, iconBg }, i) => (

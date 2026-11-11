@@ -44,7 +44,7 @@ function Chip({
       aria-pressed={selected}
       onClick={onClick}
       className={cn(
-        "rounded-md border px-3 py-1 text-sm font-medium transition-colors duration-150",
+        "min-h-10 rounded-md border px-3 py-1 text-sm font-medium transition-colors duration-150 sm:min-h-0",
         selected ? cn(color, "border-transparent") : "border-line bg-card text-ink-soft hover:border-line-strong hover:text-ink",
       )}
     >
@@ -96,7 +96,7 @@ export function FilterBar(props: FilterBarProps) {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[auto_auto_1fr] lg:gap-10">
-        <FacetGroup label="Team">
+        <FacetGroup label="Area">
           {DEPARTMENTS.map((d) => (
             <Chip
               key={d}
