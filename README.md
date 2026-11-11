@@ -63,7 +63,8 @@ Add `poster: "/videos/my-demo.jpg"` for a custom thumbnail. Entries without a `s
 ## Headshot and case study
 
 - **Headshot:** add your photo as `public/images/prince.jpg`. A neutral placeholder shows until the file exists.
-- **Case study figures:** fill in `RESULT_TIME` in `src/components/home/CaseStudy.tsx` with measured before/after times. The time panel only appears when both are set.
+- **Case study figures:** fill in `caseStudyResultTime` in `src/data/caseStudyData.ts` with measured before/after times. The time panel only appears when both are set.
+- **Case study diagrams:** `src/data/caseStudyData.ts` holds anonymised layouts of the three real workflows (positions and connections from the n8n exports, generic labels). Never paste raw exports in: they contain credentials, customer sites, prices and data fields.
 
 ## Structure
 
@@ -73,6 +74,7 @@ src/
 │  ├─ page.tsx               Home: hero, tools, services, case study, examples, process, about
 │  ├─ showroom/page.tsx      Example workflows, filterable (deep links: ?workflow=<slug>)
 │  ├─ about/page.tsx         About Prince Tony
+│  ├─ case-study/page.tsx    Case study with anonymised workflow canvases
 │  ├─ demos/page.tsx         Demo videos (behind features.demos)
 │  ├─ contact/page.tsx       Contact form (Apps Script + mailto fallback)
 │  └─ globals.css            Design tokens (@theme): paper/ink surfaces, node palette, pop shadows
