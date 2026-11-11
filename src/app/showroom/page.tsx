@@ -18,7 +18,7 @@ export default async function ShowroomPage() {
       <SectionHeading
         as="h1"
         kicker="Showroom"
-        kickerClass="bg-sky"
+        kickerClass="bg-coral"
         title="Automation workflow library."
         description="Filter by team, integration or complexity. Each workflow includes a node-by-node breakdown, business impact and importable n8n JSON."
       />

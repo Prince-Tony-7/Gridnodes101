@@ -1,18 +1,58 @@
 import Link from "next/link";
+import { cn } from "@/lib/cn";
 
-/** Wordmark: four nodes wired into a grid. */
-export function Logo() {
+/**
+ * GridNodes brand mark, inlined from public/brand/*.svg so it renders without
+ * an extra request and can switch between the light and dark versions.
+ */
+
+const BRAND_GREEN = "#0B3D2E";
+const BRAND_CREAM = "#F6F4EE";
+const BRAND_ORANGE = "#F26B1D";
+
+const WORDMARK =
+  "M50.61 1.63C63.93 1.63 72.69 -3.53 79.89 -11.89H80.1L81.52 0H94.43V-52.31H52.11V-38.18H77.17C76.63 -25.07 66.92 -14.54 51.63 -14.54C32.61 -14.54 22.62 -28.4 22.62 -50.07C22.62 -71.88 33.15 -85.46 51.36 -85.46C63.93 -85.46 73.51 -77.11 75.34 -64.74H93.75C91.85 -86.75 74.39 -101.63 51.15 -101.63C23.1 -101.63 3.8 -82.4 3.8 -49.93C3.8 -17.93 22.21 1.63 50.61 1.63ZM104.98 0H122.64V-40.9C122.64 -51.63 129.1 -57.07 137.05 -57.07C140.17 -57.07 143.7 -56.59 145.27 -56.05V-72.21C143.91 -72.55 141.87 -72.83 139.63 -72.83C131.07 -72.83 125.16 -68 122.51 -59.31H121.97V-71.74H104.98ZM151.27 0H169V-71.74H151.27ZM160.1 -82.74C165.81 -82.74 170.43 -87.23 170.43 -92.73C170.43 -98.23 165.81 -102.72 160.1 -102.72C154.39 -102.72 149.77 -98.23 149.77 -92.73C149.77 -87.23 154.39 -82.74 160.1 -82.74ZM206.45 1.09C216.1 1.09 223.71 -3.26 227.92 -11.21H228.19V0H245.79V-100H228.06V-60.46H227.78C223.98 -68.21 216.1 -72.83 206.38 -72.83C189.6 -72.83 176.83 -59.71 176.77 -35.94C176.83 -12.64 189.2 1.09 206.45 1.09ZM211.55 -13.32C201.43 -13.32 194.63 -21.26 194.63 -35.94C194.63 -50.54 201.43 -58.36 211.55 -58.36C222.15 -58.36 228.87 -49.73 228.87 -35.94C228.87 -22.15 222.21 -13.32 211.55 -13.32ZM256.47 0H274.95V-70.79H275.22L321.28 0H339.83V-100H321.35V-29.35H321.08L275.02 -100H256.47ZM383.06 1.09C404.39 1.09 418.45 -13.72 418.45 -35.8C418.45 -58.02 404.32 -72.83 383.06 -72.83C361.8 -72.83 347.67 -58.02 347.67 -35.8C347.67 -13.72 361.8 1.09 383.06 1.09ZM383.06 -13.18C372.73 -13.18 365.6 -22.01 365.6 -35.8C365.53 -49.66 372.67 -58.63 383.06 -58.63C393.39 -58.63 400.52 -49.66 400.52 -35.8C400.52 -22.01 393.32 -13.18 383.06 -13.18ZM453.8 1.09C463.45 1.09 471.06 -3.26 475.27 -11.21H475.54V0H493.14V-100H475.41V-60.46H475.13C471.33 -68.21 463.45 -72.83 453.73 -72.83C436.95 -72.83 424.18 -59.71 424.11 -35.94C424.18 -12.64 436.55 1.09 453.8 1.09ZM458.9 -13.32C448.77 -13.32 441.98 -21.26 441.98 -35.94C441.98 -50.54 448.77 -58.36 458.9 -58.36C469.5 -58.36 476.22 -49.73 476.22 -35.94C476.22 -22.15 469.56 -13.32 458.9 -13.32ZM535.62 1.09C552.81 1.09 565.24 -8.15 567.82 -22.35H551.51C549.61 -16.24 543.23 -12.43 535.82 -12.36C524.82 -12.43 518.29 -20.86 518.36 -31.32V-31.59H568.57V-35.87C568.57 -58.02 555.86 -72.83 535.28 -72.83C514.42 -72.83 500.97 -57.68 500.97 -35.8C500.97 -13.52 514.42 1.09 535.62 1.09ZM518.43 -43.07C518.97 -51.77 525.43 -59.38 535.28 -59.38C544.59 -59.38 551.72 -52.72 552.06 -43.07ZM634.15 -49.18C633.74 -63.93 621.92 -72.76 604.39 -72.76C586.93 -72.76 575.31 -64.33 575.31 -50.95C575.31 -40.22 582.24 -33.15 596.37 -30.23L608.4 -27.72C614.1 -26.49 617.98 -24.46 617.98 -20.11C617.98 -15.22 613.02 -12.3 605.34 -12.3C597.19 -12.3 592.03 -15.56 591.28 -22.42H573.68C574.84 -7.2 587.2 1.15 605.41 1.15C622.87 1.15 635.84 -7.34 635.84 -21.54C635.84 -32.2 628.51 -38.18 615.06 -41.03L602.28 -43.68C596.03 -45.04 592.84 -47.62 592.84 -51.56C592.84 -56.25 597.73 -59.38 604.66 -59.38C612.13 -59.38 617.37 -55.43 617.5 -49.18Z";
+
+function Mark({ fg, animated = false }: { fg: string; animated?: boolean }) {
   return (
-    <Link href="/" className="inline-flex items-center gap-2.5" aria-label="GridNodes home">
-      <svg viewBox="0 0 32 32" className="h-7 w-7" aria-hidden="true">
-        <rect width="32" height="32" rx="8" fill="var(--color-ink)" />
-        <path d="M10 10h12M10 10v12M22 10v12M10 22h12" stroke="rgb(255 255 255 / 0.35)" strokeWidth="1.5" />
-        <circle cx="10" cy="10" r="3.2" fill="var(--color-coral)" />
-        <circle cx="22" cy="10" r="3.2" fill="var(--color-sun)" />
-        <circle cx="10" cy="22" r="3.2" fill="var(--color-sky)" />
-        <circle cx="22" cy="22" r="3.2" fill="var(--color-mint)" />
+    <>
+      <path d="M78 18H18V78H78V48H48" fill="none" stroke={fg} strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="78" cy="18" r="10" fill={fg} />
+      <circle cx="18" cy="18" r="10" fill={fg} />
+      <circle cx="18" cy="78" r="10" fill={fg} />
+      <circle cx="78" cy="78" r="10" fill={fg} />
+      <circle cx="78" cy="48" r="10" fill={fg} />
+      <circle
+        cx="48"
+        cy="48"
+        r="11.5"
+        fill={BRAND_ORANGE}
+        className={animated ? "origin-center transition-transform duration-300 [transform-box:fill-box] group-hover:scale-125" : undefined}
+      />
+    </>
+  );
+}
+
+/** Square icon only. */
+export function LogoIcon({ tone = "light", className }: { tone?: "light" | "dark"; className?: string }) {
+  return (
+    <svg viewBox="0 0 96 96" className={className} aria-hidden="true">
+      <Mark fg={tone === "dark" ? BRAND_CREAM : BRAND_GREEN} />
+    </svg>
+  );
+}
+
+/** Full horizontal logo (icon + wordmark), linking home. */
+export function Logo({ tone = "light", className }: { tone?: "light" | "dark"; className?: string }) {
+  const fg = tone === "dark" ? BRAND_CREAM : BRAND_GREEN;
+  return (
+    <Link href="/" className={cn("group inline-flex items-center", className)} aria-label="GridNodes home">
+      <svg viewBox="0 0 888.04 192" className="h-7 w-auto" role="img" aria-hidden="true">
+        <g transform="scale(2)">
+          <Mark fg={fg} animated />
+        </g>
+        <path transform="translate(236.2 146)" d={WORDMARK} fill={fg} />
       </svg>
-      <span className="font-display text-lg font-semibold tracking-tight text-ink">GridNodes</span>
     </Link>
   );
 }

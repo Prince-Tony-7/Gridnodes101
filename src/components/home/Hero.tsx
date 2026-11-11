@@ -75,11 +75,11 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[620px] rounded-full opacity-60 blur-3xl"
         aria-hidden
       >
-        <div className="h-full w-full" style={{ background: "radial-gradient(closest-side, var(--color-violet-tint), transparent)" }} />
+        <div className="h-full w-full" style={{ background: "radial-gradient(closest-side, var(--color-coral-tint), transparent)" }} />
       </motion.div>
       <div
         className="pointer-events-none absolute top-40 right-[25%] h-[360px] w-[420px] rounded-full opacity-70 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, var(--color-sky-tint), transparent)" }}
+        style={{ background: "radial-gradient(closest-side, var(--color-mint-tint), transparent)" }}
         aria-hidden
       />
 

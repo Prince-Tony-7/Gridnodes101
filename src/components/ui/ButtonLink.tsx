@@ -6,10 +6,10 @@ type Variant = "primary" | "secondary" | "ink";
 
 export const buttonStyles: Record<Variant, string> = {
   primary:
-    "border-ink bg-gradient-to-b from-[#2b3050] to-ink text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(18_21_39/0.25),0_10px_24px_-10px_rgb(18_21_39/0.6)] hover:-translate-y-px hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_2px_4px_rgb(18_21_39/0.25),0_16px_32px_-12px_rgb(18_21_39/0.6)]",
+    "border-ink bg-gradient-to-b from-[#16573f] to-ink text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(11_61_46/0.25),0_10px_24px_-10px_rgb(11_61_46/0.6)] hover:-translate-y-px hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_2px_4px_rgb(11_61_46/0.25),0_16px_32px_-12px_rgb(11_61_46/0.6)]",
   secondary:
-    "border-line-strong bg-gradient-to-b from-white to-paper text-ink shadow-[inset_0_1px_0_white,0_1px_2px_rgb(18_21_39/0.06)] hover:-translate-y-px hover:border-ink-mute hover:shadow-pop",
-  ink: "border-ink bg-gradient-to-b from-[#2b3050] to-ink text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(18_21_39/0.25)] hover:-translate-y-px",
+    "border-line-strong bg-gradient-to-b from-white to-paper text-ink shadow-[inset_0_1px_0_white,0_1px_2px_rgb(11_61_46/0.06)] hover:-translate-y-px hover:border-ink-mute hover:shadow-pop",
+  ink: "border-ink bg-gradient-to-b from-[#16573f] to-ink text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(11_61_46/0.25)] hover:-translate-y-px",
 };
 
 export const buttonBase =

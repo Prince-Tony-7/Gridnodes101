@@ -44,7 +44,7 @@ export function ValueProps() {
       <Container>
         <SectionHeading
           kicker="How we build"
-          kickerClass="bg-mint"
+          kickerClass="bg-coral"
           title="Low-code tooling. Software engineering standards."
           description="Every workflow is built, tested and handed over like production software, because for your business it is."
         />

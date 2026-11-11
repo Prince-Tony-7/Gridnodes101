@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 export function SectionHeading({
   kicker,
-  kickerClass = "bg-violet",
+  kickerClass = "bg-coral",
   title,
   description,
   className,

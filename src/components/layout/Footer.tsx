@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/ui/Logo";
 import { siteConfig } from "@/lib/site";
 
 export function Footer() {
@@ -12,8 +13,8 @@ export function Footer() {
       <Container className="py-16">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <Reveal>
-            <p className="text-sm font-semibold tracking-widest text-paper/50 uppercase">GridNodes</p>
-            <p className="mt-4 max-w-xl font-display text-3xl leading-[1.1] font-semibold tracking-tight sm:text-4xl">
+            <Logo tone="dark" />
+            <p className="mt-8 max-w-xl font-display text-3xl leading-[1.1] font-semibold tracking-tight sm:text-4xl">
               Have a process that takes hours every week?
             </p>
             <Link

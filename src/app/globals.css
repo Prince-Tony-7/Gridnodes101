@@ -3,7 +3,7 @@
 /* ---------------------------------------------------------------------------
  * GridNodes design tokens
  *
- * Off-white canvas, deep navy ink and a restrained accent palette. Every
+ * Warm off-white canvas, brand deep-green ink, brand orange as the lead accent and a restrained supporting palette. Every
  * department and every n8n node role owns a colour (see src/lib/palette.ts).
  * Depth comes from hairline borders and soft, low shadows.
  * ------------------------------------------------------------------------- */
@@ -13,21 +13,21 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Surfaces */
-  --color-paper: #f7f7f4;
-  --color-paper-deep: #eeeee9;
-  --color-card: #ffffff;
+  --color-paper: #f6f4ee;
+  --color-paper-deep: #ece9e0;
+  --color-card: #fffefb;
 
-  /* Ink (deep navy, softer than pure black) */
-  --color-ink: #121527;
-  --color-ink-soft: #464b5e;
-  --color-ink-mute: #777c8c;
+  /* Ink: the brand's deep green */
+  --color-ink: #0b3d2e;
+  --color-ink-soft: #3d5149;
+  --color-ink-mute: #6c7c75;
 
   /* Hairlines */
-  --color-line: #e3e3dd;
-  --color-line-strong: #cfcfc8;
+  --color-line: #e2dfd5;
+  --color-line-strong: #cdc9bd;
 
   /* Accent palette: used for small marks, icons and data, not big fills */
-  --color-coral: #f0603f;
+  --color-coral: #f26b1d;
   --color-sun: #f4b42c;
   --color-mint: #16a57f;
   --color-sky: #2f8be0;
@@ -35,7 +35,7 @@
   --color-pink: #df5794;
 
   /* Darker shades for text on tints */
-  --color-coral-deep: #b8401f;
+  --color-coral-deep: #b04a0c;
   --color-sun-deep: #8f6200;
   --color-mint-deep: #0b7558;
   --color-sky-deep: #1b62a8;
@@ -43,7 +43,7 @@
   --color-pink-deep: #a8336a;
 
   /* Pale tints for surfaces */
-  --color-coral-tint: #fde3d9;
+  --color-coral-tint: #fde4d2;
   --color-sun-tint: #fdf4dd;
   --color-mint-tint: #e3f5ef;
   --color-sky-tint: #e6f1fc;
@@ -53,8 +53,8 @@
   --color-danger: #d23a26;
 
   /* Code panels stay dark for legibility */
-  --color-code: #12151f;
-  --color-code-line: #2a2f3d;
+  --color-code: #0c1f19;
+  --color-code-line: #22362f;
   --color-syntax-key: #a59bff;
   --color-syntax-string: #6edcb8;
   --color-syntax-number: #f6c66b;
@@ -64,13 +64,13 @@
   --radius-card: 1rem;
 
   /* Layered shadows: contact + ambient + long soft falloff */
-  --shadow-pop-sm: 0 1px 1px 0 rgb(18 21 39 / 0.05), 0 2px 4px -1px rgb(18 21 39 / 0.06);
+  --shadow-pop-sm: 0 1px 1px 0 rgb(11 61 46 / 0.05), 0 2px 4px -1px rgb(11 61 46 / 0.06);
   --shadow-pop:
-    0 1px 1px 0 rgb(18 21 39 / 0.04), 0 3px 6px -2px rgb(18 21 39 / 0.05), 0 14px 28px -10px rgb(18 21 39 / 0.12),
-    0 36px 72px -28px rgb(18 21 39 / 0.16);
+    0 1px 1px 0 rgb(11 61 46 / 0.04), 0 3px 6px -2px rgb(11 61 46 / 0.05), 0 14px 28px -10px rgb(11 61 46 / 0.12),
+    0 36px 72px -28px rgb(11 61 46 / 0.16);
   --shadow-pop-lg:
-    0 2px 4px 0 rgb(18 21 39 / 0.04), 0 10px 20px -6px rgb(18 21 39 / 0.08), 0 28px 56px -16px rgb(18 21 39 / 0.18),
-    0 64px 120px -40px rgb(18 21 39 / 0.28);
+    0 2px 4px 0 rgb(11 61 46 / 0.04), 0 10px 20px -6px rgb(11 61 46 / 0.08), 0 28px 56px -16px rgb(11 61 46 / 0.18),
+    0 64px 120px -40px rgb(11 61 46 / 0.28);
 
   --animate-marquee: marquee 38s linear infinite;
 
@@ -107,12 +107,12 @@
   }
 
   ::selection {
-    background: var(--color-violet-tint);
+    background: var(--color-coral-tint);
     color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-violet);
+    outline: 3px solid var(--color-coral);
     outline-offset: 2px;
   }
 
@@ -150,13 +150,13 @@
 
   /* Dotted canvas texture, a nod to the n8n editor. */
   .bg-dots {
-    background-image: radial-gradient(rgb(18 21 39 / 0.09) 1px, transparent 1px);
+    background-image: radial-gradient(rgb(11 61 46 / 0.09) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 
   /* Accent gradient for a key phrase. */
   .text-accent {
-    background: linear-gradient(100deg, var(--color-coral) 0%, var(--color-pink) 45%, var(--color-violet) 100%);
+    background: linear-gradient(100deg, var(--color-coral) 0%, #f5922a 55%, var(--color-sun) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

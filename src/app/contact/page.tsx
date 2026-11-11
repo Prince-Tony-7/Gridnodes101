@@ -24,7 +24,7 @@ export default function ContactPage() {
           <SectionHeading
             as="h1"
             kicker="Discovery call"
-            kickerClass="bg-pink"
+            kickerClass="bg-coral"
             title="Let’s find where your team is losing hours."
             description="Share the manual processes slowing your team down. We’ll review them before we meet and arrive with a draft automation plan."
           />

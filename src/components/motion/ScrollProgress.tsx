@@ -12,7 +12,7 @@ export function ScrollProgress() {
       className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left"
       style={{
         scaleX,
-        background: "linear-gradient(90deg, var(--color-coral), var(--color-pink), var(--color-violet), var(--color-sky))",
+        background: "linear-gradient(90deg, var(--color-coral), #f5922a, var(--color-sun))",
       }}
     />
   );

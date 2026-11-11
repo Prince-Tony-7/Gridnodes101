@@ -76,7 +76,7 @@ export function FilterBar(props: FilterBarProps) {
             value={filters.query}
             onChange={(e) => props.onQueryChange(e.target.value)}
             placeholder="Search by name, tool or use case"
-            className="w-full rounded-lg border border-line bg-paper py-2.5 pr-4 pl-12 text-base text-ink placeholder:text-ink-mute focus:border-violet focus:bg-card focus:ring-4 focus:ring-violet/10 focus:outline-none"
+            className="w-full rounded-lg border border-line bg-paper py-2.5 pr-4 pl-12 text-base text-ink placeholder:text-ink-mute focus:border-coral focus:bg-card focus:ring-4 focus:ring-coral/15 focus:outline-none"
           />
         </label>
         <div className="flex items-center justify-between gap-3 sm:justify-end">

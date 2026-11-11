@@ -34,7 +34,7 @@ const INITIAL: ContactPayload = {
 };
 
 const inputClass =
-  "w-full rounded-lg border bg-card px-3.5 py-2.5 text-base text-ink placeholder:text-ink-mute transition-[border-color,box-shadow] focus:border-violet focus:ring-4 focus:ring-violet/10 focus:outline-none";
+  "w-full rounded-lg border bg-card px-3.5 py-2.5 text-base text-ink placeholder:text-ink-mute transition-[border-color,box-shadow] focus:border-coral focus:ring-4 focus:ring-coral/15 focus:outline-none";
 
 function Field({
   id,
@@ -223,8 +223,8 @@ export function ContactForm() {
                   <label
                     key={tool}
                     className={cn(
-                      "cursor-pointer rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-150 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-violet",
-                      checked ? "border-violet bg-violet-tint text-violet-deep" : "border-line-strong bg-card text-ink-soft hover:border-ink-mute hover:text-ink",
+                      "cursor-pointer rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-150 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-coral",
+                      checked ? "border-coral bg-coral-tint text-coral-deep" : "border-line-strong bg-card text-ink-soft hover:border-ink-mute hover:text-ink",
                     )}
                   >
                     <input type="checkbox" className="sr-only" checked={checked} onChange={() => toggleTool(tool)} />

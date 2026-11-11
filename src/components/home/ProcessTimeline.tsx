@@ -70,9 +70,9 @@ export function ProcessTimeline() {
     <section className="relative isolate overflow-hidden bg-ink py-28 text-white">
       {/* depth: coloured glows and a faint grid, masked to fade at the edges */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-[10%] h-[480px] w-[480px] rounded-full bg-violet/30 blur-[120px]" />
-        <div className="absolute right-[-5%] bottom-[-20%] h-[520px] w-[520px] rounded-full bg-sky/20 blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] rounded-full bg-coral/10 blur-[100px]" />
+        <div className="absolute -top-40 left-[10%] h-[480px] w-[480px] rounded-full bg-mint/25 blur-[120px]" />
+        <div className="absolute right-[-5%] bottom-[-20%] h-[520px] w-[520px] rounded-full bg-coral/15 blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] rounded-full bg-sun/10 blur-[100px]" />
         <div
           className="absolute inset-0 opacity-[0.07] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
           style={{
@@ -86,7 +86,7 @@ export function ProcessTimeline() {
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading
             kicker="How we deliver"
-            kickerClass="bg-violet"
+            kickerClass="bg-coral"
             tone="dark"
             title="From first call to production in four weeks."
             description="A fixed, transparent process. You see working automations every week, and nothing goes live without error handling and monitoring in place."
