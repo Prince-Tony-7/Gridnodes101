@@ -31,7 +31,7 @@ export default function CaseStudyPage() {
         <Reveal delay={0.1} className="mt-6 flex max-w-3xl items-start gap-2 rounded-lg border border-line bg-card px-4 py-3 text-sm text-ink-soft">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-coral-deep" aria-hidden />
           <p>
-            I built these for my employer. To protect the company and its customers, names, sites, products, prices and
+            To protect the company and its customers, names, sites, products, prices and
             data fields are left out, and node labels in the diagrams are generic. The structure of each workflow is real.
           </p>
         </Reveal>
