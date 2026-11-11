@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { Tilt } from "@/components/motion/Tilt";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/cn";
 import { complexityColor, departmentColor } from "@/lib/palette";
@@ -81,11 +81,7 @@ function CardBody({ workflow }: { workflow: Workflow }) {
 
 export function WorkflowCard({ workflow, onSelect }: WorkflowCardProps) {
   return (
-    <motion.div
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.2 }}
-      className="h-full"
-    >
+    <Tilt className="h-full rounded-card" max={5} lift={4}>
       {onSelect ? (
         <button
           type="button"
@@ -101,6 +97,6 @@ export function WorkflowCard({ workflow, onSelect }: WorkflowCardProps) {
           <CardBody workflow={workflow} />
         </Link>
       )}
-    </motion.div>
+    </Tilt>
   );
 }

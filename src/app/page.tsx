@@ -21,7 +21,7 @@ export default async function HomePage() {
       <IntegrationsMarquee />
       <MetricsRibbon metrics={globalMetrics} />
 
-      <section className="pt-20">
+      <section className="pt-20 pb-28">
         <Container>
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading

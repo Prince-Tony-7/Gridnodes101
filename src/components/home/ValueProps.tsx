@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Code2, Gauge, LineChart, ShieldCheck } from "lucide-react";
+import { Tilt } from "@/components/motion/Tilt";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/cn";
@@ -55,11 +56,12 @@ export function ValueProps() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
-              className={cn("pop rounded-card bg-card p-7 transition-shadow hover:shadow-pop-lg", className)}
+              className={className}
             >
+              <Tilt className="pop h-full rounded-card bg-card p-7 transition-shadow duration-300 hover:shadow-pop-lg" max={4}>
               <span
                 className={cn(
-                  "inline-flex h-11 w-11 items-center justify-center rounded-xl",
+                  "inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-pop-sm [transform:translateZ(40px)]",
                   iconBg,
                 )}
               >
@@ -67,6 +69,7 @@ export function ValueProps() {
               </span>
               <h3 className="mt-5 text-xl font-semibold tracking-tight text-ink">{title}</h3>
               <p className="mt-2 leading-relaxed text-ink-soft">{body}</p>
+              </Tilt>
             </motion.div>
           ))}
         </div>

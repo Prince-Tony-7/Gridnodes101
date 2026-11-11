@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Tilt } from "@/components/motion/Tilt";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/cn";
@@ -63,6 +64,11 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden">
+      {/* dot grid, fading out from the top-right */}
+      <div
+        aria-hidden
+        className="bg-dots pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_70%_30%,black,transparent)]"
+      />
       {/* soft colour wash */}
       <motion.div
         style={{ y: washY }}
@@ -127,13 +133,35 @@ export function Hero() {
           className="relative"
         >
           <motion.div style={{ y: graphY }} className="relative">
-          <HeroGraph />
-          <div className="absolute top-16 -left-8 hidden rounded-xl border border-line bg-card px-4 py-3 shadow-pop sm:block">
+          <Tilt className="rounded-card" max={7} spotlight={null}>
+            {/* stacked panels behind the canvas */}
+            <div
+              aria-hidden
+              className="absolute inset-x-8 -bottom-6 top-6 rounded-card border border-line bg-card/60 shadow-pop [transform:translateZ(-60px)]"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-x-4 -bottom-3 top-3 rounded-card border border-line bg-card/80 shadow-pop [transform:translateZ(-30px)]"
+            />
+            <div className="relative rounded-card shadow-pop-lg">
+              <HeroGraph />
+            </div>
+          <div className="absolute top-16 -left-8 hidden rounded-xl border border-line bg-card/90 px-4 py-3 shadow-pop-lg backdrop-blur [transform:translateZ(70px)] sm:block">
             <p className="text-xs font-medium text-ink-mute">Median speed-to-lead</p>
             <p className="font-display text-2xl font-semibold tracking-tight text-ink">
               9s <span className="text-sm font-medium text-mint-deep">↓ from 4h</span>
             </p>
           </div>
+          <div className="absolute -right-6 -bottom-8 hidden items-center gap-3 rounded-xl border border-line bg-card/90 px-4 py-3 shadow-pop-lg backdrop-blur [transform:translateZ(50px)] md:flex">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-mint-tint text-mint-deep">
+              <ShieldCheck className="h-[18px] w-[18px]" aria-hidden />
+            </span>
+            <span>
+              <span className="block text-xs font-medium text-ink-mute">Failed runs auto-recovered</span>
+              <span className="block font-display text-lg font-semibold tracking-tight text-ink">99.2%</span>
+            </span>
+          </div>
+          </Tilt>
           </motion.div>
         </motion.div>
       </Container>

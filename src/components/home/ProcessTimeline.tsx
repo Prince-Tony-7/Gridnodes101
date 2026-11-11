@@ -14,7 +14,6 @@ interface Step {
   body: string;
   deliverables: string[];
   accent: string;
-  soft: string;
 }
 
 const STEPS: Step[] = [
@@ -25,7 +24,6 @@ const STEPS: Step[] = [
     body: "We map the current process with the people who run it, measure how long it really takes and agree on the success metric.",
     deliverables: ["Process map", "Baseline metrics", "Fixed-scope proposal"],
     accent: "bg-coral",
-    soft: "bg-coral-tint text-coral-deep",
   },
   {
     icon: Hammer,
@@ -34,7 +32,6 @@ const STEPS: Step[] = [
     body: "Workflows are built against sandbox credentials, with every node named, documented and versioned in Git.",
     deliverables: ["n8n workflows", "Test fixtures", "Weekly demo"],
     accent: "bg-violet",
-    soft: "bg-violet-tint text-violet-deep",
   },
   {
     icon: ShieldCheck,
@@ -43,7 +40,6 @@ const STEPS: Step[] = [
     body: "Error workflows, retries, idempotency keys and alerting go in before anything touches production data.",
     deliverables: ["Error handling", "Monitoring", "Go-live checklist"],
     accent: "bg-sky",
-    soft: "bg-sky-tint text-sky-deep",
   },
   {
     icon: LifeBuoy,
@@ -52,7 +48,6 @@ const STEPS: Step[] = [
     body: "Your team gets a runbook and a walkthrough. We report ROI against the baseline and stay on call if you want us.",
     deliverables: ["Runbook", "ROI report", "Optional support plan"],
     accent: "bg-mint",
-    soft: "bg-mint-tint text-mint-deep",
   },
 ];
 
@@ -72,21 +67,36 @@ export function ProcessTimeline() {
   const isActive = (i: number) => reduce || progress >= i / (STEPS.length - 1) - 0.08;
 
   return (
-    <section className="py-24">
+    <section className="relative isolate overflow-hidden bg-ink py-28 text-white">
+      {/* depth: coloured glows and a faint grid, masked to fade at the edges */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-40 left-[10%] h-[480px] w-[480px] rounded-full bg-violet/30 blur-[120px]" />
+        <div className="absolute right-[-5%] bottom-[-20%] h-[520px] w-[520px] rounded-full bg-sky/20 blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] rounded-full bg-coral/10 blur-[100px]" />
+        <div
+          className="absolute inset-0 opacity-[0.07] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+          style={{
+            backgroundImage:
+              "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+      </div>
       <Container className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading
             kicker="How we deliver"
             kickerClass="bg-violet"
+            tone="dark"
             title="From first call to production in four weeks."
             description="A fixed, transparent process. You see working automations every week, and nothing goes live without error handling and monitoring in place."
           />
-          <div className="mt-8 hidden items-center gap-3 text-sm text-ink-mute lg:flex" aria-hidden>
+          <div className="mt-8 hidden items-center gap-3 text-sm text-white/50 lg:flex" aria-hidden>
             <span className="font-mono tabular-nums">
               {String(STEPS.filter((_, i) => isActive(i)).length).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
             </span>
-            <span className="h-px w-24 overflow-hidden bg-line">
-              <motion.span className="block h-full origin-left bg-ink" style={{ scaleX: reduce ? 1 : fill }} />
+            <span className="h-px w-24 overflow-hidden bg-white/15">
+              <motion.span className="block h-full origin-left bg-white" style={{ scaleX: reduce ? 1 : fill }} />
             </span>
             <span>steps complete</span>
           </div>
@@ -94,7 +104,7 @@ export function ProcessTimeline() {
 
         <ol ref={listRef} className="relative space-y-6">
           {/* rail */}
-          <span className="absolute top-2 bottom-2 left-[19px] w-px bg-line-strong" aria-hidden />
+          <span className="absolute top-2 bottom-2 left-[19px] w-px bg-white/15" aria-hidden />
           <motion.span
             className="absolute top-2 bottom-2 left-[18px] w-[3px] origin-top rounded-full"
             style={{
@@ -113,7 +123,9 @@ export function ProcessTimeline() {
                   <motion.span
                     className={cn(
                       "flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-500",
-                      active ? cn(step.accent, "border-transparent text-white") : "border-line-strong bg-card text-ink-mute",
+                      active
+                        ? cn(step.accent, "border-transparent text-white shadow-[0_0_0_4px_rgb(255_255_255/0.06),0_8px_24px_-6px_rgb(0_0_0/0.6)]")
+                        : "border-white/15 bg-ink text-white/40",
                     )}
                     animate={active && !reduce ? { scale: [1, 1.15, 1] } : { scale: 1 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
@@ -134,16 +146,17 @@ export function ProcessTimeline() {
 
                 <div
                   className={cn(
-                    "pop flex-1 rounded-card bg-card p-6 transition-[opacity,transform] duration-500",
-                    active ? "translate-x-0 opacity-100" : "translate-x-2 opacity-45",
+                    "glass flex-1 rounded-card p-6 transition-[opacity,transform] duration-500",
+                    active ? "translate-x-0 opacity-100" : "translate-x-2 opacity-40",
                   )}
                 >
-                  <p className="text-xs font-semibold tracking-wider text-ink-mute uppercase">{step.week}</p>
-                  <h3 className="mt-1.5 text-xl font-semibold tracking-tight text-ink">{step.title}</h3>
-                  <p className="mt-2 leading-relaxed text-ink-soft">{step.body}</p>
+                  <p className="text-xs font-semibold tracking-wider text-white/45 uppercase">{step.week}</p>
+                  <h3 className="mt-1.5 text-xl font-semibold tracking-tight text-white">{step.title}</h3>
+                  <p className="mt-2 leading-relaxed text-white/65">{step.body}</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {step.deliverables.map((d) => (
-                      <li key={d} className={cn("rounded-md px-2 py-0.5 text-xs font-medium", step.soft)}>
+                      <li key={d} className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.07] px-2 py-0.5 text-xs font-medium text-white/80 ring-1 ring-white/10">
+                        <span className={cn("h-1.5 w-1.5 rounded-full", step.accent)} aria-hidden />
                         {d}
                       </li>
                     ))}
