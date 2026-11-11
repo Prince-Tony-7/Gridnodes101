@@ -1,8 +1,8 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/cn";
@@ -48,6 +48,13 @@ function RotatingTeam() {
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  // Gentle parallax as the hero scrolls away: graph drifts up, copy eases out.
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const graphY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -90]);
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 50]);
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.8], [1, reduce ? 1 : 0.2]);
+  const washY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 160]);
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 16 },
     animate: { opacity: 1, y: 0 },
@@ -55,13 +62,15 @@ export function Hero() {
   });
 
   return (
-    <section className="relative overflow-hidden">
+    <section ref={sectionRef} className="relative overflow-hidden">
       {/* soft colour wash */}
-      <div
+      <motion.div
+        style={{ y: washY }}
         className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[620px] rounded-full opacity-60 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, var(--color-violet-tint), transparent)" }}
         aria-hidden
-      />
+      >
+        <div className="h-full w-full" style={{ background: "radial-gradient(closest-side, var(--color-violet-tint), transparent)" }} />
+      </motion.div>
       <div
         className="pointer-events-none absolute top-40 right-[25%] h-[360px] w-[420px] rounded-full opacity-70 blur-3xl"
         style={{ background: "radial-gradient(closest-side, var(--color-sky-tint), transparent)" }}
@@ -69,7 +78,7 @@ export function Hero() {
       />
 
       <Container className="relative grid items-center gap-14 pt-16 pb-20 lg:grid-cols-[1.05fr_1fr] lg:pt-24 lg:pb-28">
-        <div>
+        <motion.div style={{ y: copyY, opacity: copyOpacity }}>
           <motion.p
             {...rise(0)}
             className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-3 py-1 text-sm font-medium text-ink-soft shadow-pop-sm"
@@ -109,7 +118,7 @@ export function Hero() {
               </li>
             ))}
           </motion.ul>
-        </div>
+        </motion.div>
 
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 24 }}
@@ -117,6 +126,7 @@ export function Hero() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
           className="relative"
         >
+          <motion.div style={{ y: graphY }} className="relative">
           <HeroGraph />
           <div className="absolute top-16 -left-8 hidden rounded-xl border border-line bg-card px-4 py-3 shadow-pop sm:block">
             <p className="text-xs font-medium text-ink-mute">Median speed-to-lead</p>
@@ -124,6 +134,7 @@ export function Hero() {
               9s <span className="text-sm font-medium text-mint-deep">↓ from 4h</span>
             </p>
           </div>
+          </motion.div>
         </motion.div>
       </Container>
     </section>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/cn";
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export default function ContactPage() {
           />
           <ol className="space-y-4">
             {steps.map(({ title, body, color }, i) => (
-              <li key={title} className="flex gap-4">
+              <Reveal as="li" key={title} delay={0.15 + i * 0.1} y={16} className="flex gap-4">
                 <span
                   className={cn(
                     "flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-display text-sm font-semibold",
@@ -42,11 +43,13 @@ export default function ContactPage() {
                   <p className="font-semibold text-ink">{title}</p>
                   <p className="mt-0.5 text-ink-soft">{body}</p>
                 </div>
-              </li>
+              </Reveal>
             ))}
           </ol>
         </div>
-        <ContactForm />
+        <Reveal delay={0.1}>
+          <ContactForm />
+        </Reveal>
       </div>
     </Container>
   );

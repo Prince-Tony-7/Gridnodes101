@@ -7,6 +7,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbf6ec",
+  themeColor: "#f7f7f4",
   colorScheme: "light",
 };
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
+        <ScrollProgress />
         <Navbar />
         <main id="main" className="flex-1">
           {children}

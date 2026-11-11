@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/lib/site";
 
@@ -10,7 +11,7 @@ export function Footer() {
     <footer className="mt-28 bg-ink text-paper">
       <Container className="py-16">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+          <Reveal>
             <p className="text-sm font-semibold tracking-widest text-paper/50 uppercase">GridNodes</p>
             <p className="mt-4 max-w-xl font-display text-3xl leading-[1.1] font-semibold tracking-tight sm:text-4xl">
               Have a process that takes hours every week?
@@ -22,7 +23,7 @@ export function Footer() {
               Let’s scope the automation
               <ArrowUpRight className="h-5 w-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden />
             </Link>
-          </div>
+          </Reveal>
 
           <nav aria-label="Footer" className="flex gap-6 text-sm font-medium">
             {siteConfig.nav.map((item) => (

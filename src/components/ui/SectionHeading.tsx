@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/cn";
 
 export function SectionHeading({
@@ -18,7 +19,7 @@ export function SectionHeading({
   as?: "h1" | "h2";
 }) {
   return (
-    <div className={cn("max-w-2xl space-y-4", className)}>
+    <Reveal className={cn("max-w-2xl space-y-4", className)}>
       {kicker && (
         <p className="inline-flex items-center gap-2 text-sm font-semibold tracking-wide text-ink-soft uppercase">
           <span className={cn("h-1.5 w-1.5 rounded-full", kickerClass)} aria-hidden />
@@ -27,6 +28,6 @@ export function SectionHeading({
       )}
       <Tag className="text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-ink sm:text-5xl">{title}</Tag>
       {description && <p className="text-lg leading-relaxed text-pretty text-ink-soft">{description}</p>}
-    </div>
+    </Reveal>
   );
 }
