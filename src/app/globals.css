@@ -17,10 +17,14 @@
   --color-paper-deep: #ece9e0;
   --color-card: #fffefb;
 
-  /* Ink: the brand's deep green */
+  /* Brand palette (see brand guide): Bog Green, Deep Green, Ink, Chalk, Signal Orange.
+   * `ink` is Bog Green and is used for headings, buttons and brand surfaces;
+   * `text` is the neutral Ink used for body copy; `deep` is for dark sections. */
   --color-ink: #0b3d2e;
-  --color-ink-soft: #3d5149;
-  --color-ink-mute: #6c7c75;
+  --color-deep: #082a20;
+  --color-text: #14201b;
+  --color-ink-soft: #3b4842;
+  --color-ink-mute: #6b7570;
 
   /* Hairlines */
   --color-line: #e2dfd5;
@@ -53,8 +57,8 @@
   --color-danger: #d23a26;
 
   /* Code panels stay dark for legibility */
-  --color-code: #0c1f19;
-  --color-code-line: #22362f;
+  --color-code: #082a20;
+  --color-code-line: #1c3d32;
   --color-syntax-key: #a59bff;
   --color-syntax-string: #6edcb8;
   --color-syntax-number: #f6c66b;
@@ -93,7 +97,7 @@
 
   body {
     background-color: var(--color-paper);
-    color: var(--color-ink);
+    color: var(--color-text);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -104,6 +108,7 @@
   h3 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    color: var(--color-ink);
   }
 
   ::selection {

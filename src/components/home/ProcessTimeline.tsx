@@ -67,7 +67,7 @@ export function ProcessTimeline() {
   const isActive = (i: number) => reduce || progress >= i / (STEPS.length - 1) - 0.08;
 
   return (
-    <section className="relative isolate overflow-hidden bg-ink py-28 text-white">
+    <section className="relative isolate overflow-hidden bg-deep py-28 text-white">
       {/* depth: coloured glows and a faint grid, masked to fade at the edges */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-40 left-[10%] h-[480px] w-[480px] rounded-full bg-mint/25 blur-[120px]" />
@@ -125,7 +125,7 @@ export function ProcessTimeline() {
                       "flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-500",
                       active
                         ? cn(step.accent, "border-transparent text-white shadow-[0_0_0_4px_rgb(255_255_255/0.06),0_8px_24px_-6px_rgb(0_0_0/0.6)]")
-                        : "border-white/15 bg-ink text-white/40",
+                        : "border-white/15 bg-deep text-white/40",
                     )}
                     animate={active && !reduce ? { scale: [1, 1.15, 1] } : { scale: 1 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}

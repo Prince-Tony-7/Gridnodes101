@@ -32,6 +32,20 @@ and allow the site's origin in the Webhook node's CORS ("Allowed Origins") optio
 Without it, the form shows a "not connected yet" message instead of submitting.
 For local dev, set `NEXT_PUBLIC_INTAKE_WEBHOOK_URL` in `.env.local`.
 
+## Brand
+
+Brand assets live in `public/brand/` (light/dark logo and icon, plus the avatar tile used as the favicon). The palette is defined in `src/app/globals.css`:
+
+| Name | Hex | Token | Used for |
+| --- | --- | --- | --- |
+| Bog Green | `#0B3D2E` | `ink` | Headings, buttons, logo |
+| Deep Green | `#082A20` | `deep` | Dark sections, footer, code panels |
+| Ink | `#14201B` | `text` | Body copy |
+| Chalk | `#F6F4EE` | `paper` | Page background |
+| Signal Orange | `#F26B1D` | `coral` | Lead accent |
+
+`src/app/icon.svg`, `apple-icon.png` and `opengraph-image.png` / `twitter-image.png` are picked up automatically as the favicon, home-screen icon and link-preview image.
+
 ## Demo videos
 
 Demo recordings live in `src/data/demosData.ts` and appear on `/demos` and the home page. To publish one, set `source` on its entry:

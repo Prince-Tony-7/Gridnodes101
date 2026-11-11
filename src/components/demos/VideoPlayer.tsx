@@ -28,7 +28,7 @@ export function VideoPlayer({ demo }: { demo: DemoVideo }) {
   const { source } = demo;
 
   return (
-    <div className="pop relative aspect-video w-full overflow-hidden rounded-card bg-ink">
+    <div className="pop relative aspect-video w-full overflow-hidden rounded-card bg-deep">
       {playing && source ? (
         source.kind === "file" ? (
           <video

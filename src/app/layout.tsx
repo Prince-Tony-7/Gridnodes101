@@ -11,6 +11,8 @@ import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
+  // Absolute base for share-image URLs. Set SITE_URL when moving to a custom domain.
+  metadataBase: new URL(process.env.SITE_URL ?? "https://prince-tony-7.github.io"),
   title: { default: siteConfig.title, template: `%s · ${siteConfig.name}` },
   description: siteConfig.description,
   openGraph: { title: siteConfig.title, description: siteConfig.description, type: "website" },
