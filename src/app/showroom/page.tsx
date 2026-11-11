@@ -14,16 +14,17 @@ export default async function ShowroomPage() {
   const workflows = await getAllWorkflows();
 
   return (
-    <Container className="pt-16 pb-8">
+    <Container className="pt-14 pb-8">
       <SectionHeading
         as="h1"
-        eyebrow="Automation Showroom"
-        title="Explore production n8n workflows"
-        description="Filter by department, integration or complexity. Open any workflow for a node-by-node breakdown, ROI data, technical specs and importable JSON."
+        kicker="The showroom"
+        kickerClass="bg-sky"
+        title="Workflows we've actually shipped."
+        description="Filter by team, tool or complexity. Open any card for the node-by-node breakdown, the numbers, and JSON you can paste straight into n8n."
       />
       <div className="mt-10">
         {/* useSearchParams (deep-linked modal) requires a Suspense boundary for static rendering. */}
-        <Suspense fallback={<div className="h-64 animate-pulse rounded-card border border-line bg-surface/40" />}>
+        <Suspense fallback={<div className="pop h-64 animate-pulse rounded-card bg-paper-deep" />}>
           <ShowroomGallery workflows={workflows} />
         </Suspense>
       </div>

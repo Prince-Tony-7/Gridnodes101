@@ -4,10 +4,12 @@ import { Container } from "@/components/ui/Container";
 export default function NotFound() {
   return (
     <Container className="flex flex-col items-center py-32 text-center">
-      <p className="font-mono text-sm text-accent-strong">404 · node not found</p>
-      <h1 className="mt-3 text-3xl font-semibold text-fg">This path has no outgoing connection.</h1>
-      <ButtonLink href="/" className="mt-8">
-        Back to home
+      <span className="inline-block -rotate-3 rounded-lg border-2 border-ink bg-coral px-3 py-1 font-display text-lg font-extrabold shadow-pop-sm">
+        404
+      </span>
+      <h1 className="mt-6 text-4xl font-extrabold text-ink sm:text-5xl">This node has no outgoing connection.</h1>
+      <ButtonLink href="/" className="mt-10">
+        Take me home
       </ButtonLink>
     </Container>
   );

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { tokenizeJson, type JsonTokenType } from "@/lib/highlightJson";
 import { cn } from "@/lib/cn";
+import { tokenizeJson, type JsonTokenType } from "@/lib/highlightJson";
 
 const tokenClass: Record<JsonTokenType, string> = {
   key: "text-syntax-key",
@@ -17,17 +17,17 @@ export function CodeBlock({ code, className }: { code: string; className?: strin
   const lineCount = useMemo(() => code.split("\n").length, [code]);
 
   return (
-    <div className={cn("scrollbar-thin overflow-auto bg-surface-sunken", className)}>
+    <div className={cn("scrollbar-thin overflow-auto bg-code", className)}>
       <div className="flex min-w-max font-mono text-[12.5px] leading-6">
         <div
           aria-hidden
-          className="sticky left-0 border-r border-line bg-surface-sunken px-3 py-4 text-right text-fg-subtle/60 select-none"
+          className="sticky left-0 border-r border-code-line bg-code px-3 py-4 text-right text-syntax-punct/60 select-none"
         >
           {Array.from({ length: lineCount }, (_, i) => (
             <div key={i}>{i + 1}</div>
           ))}
         </div>
-        <pre className="px-4 py-4 text-fg">
+        <pre className="px-4 py-4 text-[#f3ece0]">
           <code>
             {tokens.map((t, i) => (
               <span key={i} className={tokenClass[t.type]}>

@@ -1,8 +1,17 @@
 "use client";
 
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, X } from "lucide-react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { COMPLEXITIES, DEPARTMENTS, type Complexity, type Department, type Integration, type WorkflowFilters } from "@/lib/types";
+import { complexityColor, departmentColor, rotation } from "@/lib/palette";
+import {
+  COMPLEXITIES,
+  DEPARTMENTS,
+  type Complexity,
+  type Department,
+  type Integration,
+  type WorkflowFilters,
+} from "@/lib/types";
 
 interface FilterBarProps {
   filters: WorkflowFilters;
@@ -17,17 +26,26 @@ interface FilterBarProps {
   onReset: () => void;
 }
 
-function Chip({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: string }) {
+/** Selected chips fill with their own colour and pop out; idle chips stay paper. */
+function Chip({
+  selected,
+  onClick,
+  color,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  color: string;
+  children: string;
+}) {
   return (
     <button
       type="button"
       aria-pressed={selected}
       onClick={onClick}
       className={cn(
-        "rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
-        selected
-          ? "border-accent/50 bg-accent-soft text-accent-strong"
-          : "border-line bg-surface/60 text-fg-muted hover:border-line-strong hover:text-fg",
+        "rounded-full border-2 border-ink px-3.5 py-1 text-sm font-semibold transition-all duration-150",
+        selected ? cn(color, "-translate-y-0.5 shadow-pop-sm") : "bg-card text-ink hover:bg-paper-deep",
       )}
     >
       {children}
@@ -35,10 +53,10 @@ function Chip({ selected, onClick, children }: { selected: boolean; onClick: () 
   );
 }
 
-function FacetGroup({ label, children }: { label: string; children: React.ReactNode }) {
+function FacetGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
     <fieldset className="flex flex-wrap items-center gap-2">
-      <legend className="mb-2 w-full font-mono text-[11px] tracking-wider text-fg-subtle uppercase">{label}</legend>
+      <legend className="mb-2.5 w-full text-sm font-bold text-ink">{label}</legend>
       {children}
     </fieldset>
   );
@@ -48,54 +66,63 @@ export function FilterBar(props: FilterBarProps) {
   const { filters, integrations, active, resultCount, totalCount } = props;
 
   return (
-    <div className="rounded-card border border-line bg-surface/60 p-5 shadow-card">
+    <div className="pop rounded-card bg-card p-5 sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <label className="relative flex-1">
           <span className="sr-only">Search workflows</span>
-          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-fg-subtle" aria-hidden />
+          <Search className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-ink" aria-hidden />
           <input
             type="search"
             value={filters.query}
             onChange={(e) => props.onQueryChange(e.target.value)}
-            placeholder="Search by name, tool, node or outcome…"
-            className="w-full rounded-lg border border-line bg-surface-sunken py-2.5 pr-3 pl-9 text-sm text-fg placeholder:text-fg-subtle focus:border-accent/50 focus:outline-none"
+            placeholder="Try “stripe”, “AI” or “slack”…"
+            className="w-full rounded-full border-2 border-ink bg-paper py-3 pr-4 pl-12 text-base text-ink placeholder:text-ink-mute focus:bg-sun-tint focus:outline-none"
           />
         </label>
         <div className="flex items-center justify-between gap-3 sm:justify-end">
-          <p className="font-mono text-xs text-fg-subtle" aria-live="polite">
-            <SlidersHorizontal className="mr-1.5 inline h-3.5 w-3.5" aria-hidden />
-            {resultCount} / {totalCount} workflows
+          <p className="text-sm font-semibold text-ink-soft" aria-live="polite">
+            <span className="font-display text-xl font-extrabold text-ink">{resultCount}</span> of {totalCount}
           </p>
           {active && (
             <button
               type="button"
               onClick={props.onReset}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-fg-muted hover:text-fg"
+              className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-coral-tint px-3 py-1 text-sm font-semibold hover:bg-coral"
             >
-              <X className="h-3.5 w-3.5" aria-hidden /> Clear
+              <X className="h-4 w-4" aria-hidden /> Clear
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[auto_auto_1fr] lg:gap-8">
-        <FacetGroup label="Department">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[auto_auto_1fr] lg:gap-10">
+        <FacetGroup label="Team">
           {DEPARTMENTS.map((d) => (
-            <Chip key={d} selected={filters.departments.includes(d)} onClick={() => props.onToggleDepartment(d)}>
+            <Chip
+              key={d}
+              selected={filters.departments.includes(d)}
+              color={departmentColor[d].solid}
+              onClick={() => props.onToggleDepartment(d)}
+            >
               {d}
             </Chip>
           ))}
         </FacetGroup>
         <FacetGroup label="Complexity">
           {COMPLEXITIES.map((c) => (
-            <Chip key={c} selected={filters.complexity === c} onClick={() => props.onComplexityChange(c)}>
+            <Chip key={c} selected={filters.complexity === c} color={complexityColor[c]} onClick={() => props.onComplexityChange(c)}>
               {c}
             </Chip>
           ))}
         </FacetGroup>
         <FacetGroup label="Integrations">
-          {integrations.map((i) => (
-            <Chip key={i} selected={filters.integrations.includes(i)} onClick={() => props.onToggleIntegration(i)}>
+          {integrations.map((i, idx) => (
+            <Chip
+              key={i}
+              selected={filters.integrations.includes(i)}
+              color={rotation[idx % rotation.length]!}
+              onClick={() => props.onToggleIntegration(i)}
+            >
               {i}
             </Chip>
           ))}

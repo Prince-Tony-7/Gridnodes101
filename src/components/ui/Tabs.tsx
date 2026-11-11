@@ -8,6 +8,8 @@ export interface TabItem<T extends string> {
   id: T;
   label: string;
   icon?: ReactNode;
+  /** Background class for the active indicator, e.g. `bg-sky`. */
+  color?: string;
 }
 
 interface TabsProps<T extends string> {
@@ -18,7 +20,7 @@ interface TabsProps<T extends string> {
   children: (active: T, panelProps: { id: string; role: "tabpanel"; "aria-labelledby": string; tabIndex: 0 }) => ReactNode;
 }
 
-/** Accessible tablist (roving tabindex, arrow/Home/End keys) with an animated indicator. */
+/** Accessible tablist (roving tabindex, arrow/Home/End keys) with an animated, colour-changing indicator. */
 export function Tabs<T extends string>({ items, value, onChange, children }: TabsProps<T>) {
   const baseId = useId();
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -44,7 +46,7 @@ export function Tabs<T extends string>({ items, value, onChange, children }: Tab
 
   return (
     <div>
-      <div role="tablist" className="flex gap-1 rounded-lg border border-line bg-surface-sunken p-1">
+      <div role="tablist" className="flex gap-1 rounded-full border-2 border-ink bg-card p-1">
         {items.map((item, i) => {
           const selected = item.id === value;
           return (
@@ -62,26 +64,24 @@ export function Tabs<T extends string>({ items, value, onChange, children }: Tab
               onClick={() => onChange(item.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                "relative flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-medium transition-colors sm:text-sm",
-                selected ? "text-fg" : "text-fg-muted hover:text-fg",
+                "relative z-0 flex flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-2 text-xs font-bold transition-colors sm:px-3 sm:text-sm",
+                selected ? "text-ink" : "text-ink-soft hover:text-ink",
               )}
             >
               {selected && (
                 <motion.span
                   layoutId={`${baseId}-indicator`}
-                  className="absolute inset-0 rounded-md border border-line-strong bg-surface-raised"
-                  transition={{ type: "spring", stiffness: 500, damping: 38 }}
+                  className={cn("absolute inset-0 -z-10 rounded-full border-2 border-ink", item.color ?? "bg-sun")}
+                  transition={{ type: "spring", stiffness: 480, damping: 34 }}
                 />
               )}
-              <span className="relative inline-flex items-center gap-1.5">
-                {item.icon}
-                {item.label}
-              </span>
+              {item.icon}
+              {item.label}
             </button>
           );
         })}
       </div>
-      <div className="mt-4">
+      <div className="mt-5">
         {children(value, { id: panelId(value), role: "tabpanel", "aria-labelledby": tabId(value), tabIndex: 0 })}
       </div>
     </div>

@@ -1,27 +1,39 @@
-import { Gauge, ShieldCheck, Code2, LineChart } from "lucide-react";
+"use client";
+
+import { motion } from "framer-motion";
+import { Code2, Gauge, LineChart, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { cn } from "@/lib/cn";
 
 const props = [
   {
     icon: ShieldCheck,
-    title: "Hardened by default",
-    body: "Global error workflows, idempotent upserts, retries with backoff and least-privilege credentials on every build.",
+    title: "Breaks loudly, never silently",
+    body: "Every build ships with a global error workflow, retries with backoff and idempotent writes. If something fails at 3am, you hear about it, and nothing gets double-charged.",
+    className: "bg-coral-tint lg:col-span-2",
+    iconBg: "bg-coral",
   },
   {
     icon: Gauge,
-    title: "Built for throughput",
-    body: "Queue-mode n8n on Redis + Postgres, horizontally scaled workers and rate-limit aware batching.",
+    title: "Handles the busy days",
+    body: "Queue-mode n8n, horizontal workers, rate-limit aware batching.",
+    className: "bg-sky-tint",
+    iconBg: "bg-sky",
   },
   {
     icon: LineChart,
-    title: "ROI you can audit",
-    body: "Every workflow ships with baseline metrics, execution logging and a business-value dashboard.",
+    title: "ROI with receipts",
+    body: "We measure the manual baseline first, then show you the hours saved.",
+    className: "bg-sun-tint",
+    iconBg: "bg-sun",
   },
   {
     icon: Code2,
-    title: "Yours to own",
-    body: "Version-controlled JSON, documented nodes and a handover runbook — no black boxes, no lock-in.",
+    title: "You own all of it",
+    body: "Version-controlled JSON, documented nodes and a handover runbook. No black boxes, no lock-in, no retainer you can't leave.",
+    className: "bg-mint-tint lg:col-span-2",
+    iconBg: "bg-mint",
   },
 ];
 
@@ -30,19 +42,33 @@ export function ValueProps() {
     <section className="py-24">
       <Container>
         <SectionHeading
-          eyebrow="Why GridNodes"
-          title="Automation engineered like software, not stitched together."
-          description="Low-code doesn't mean low standards. We bring software-engineering rigor to every canvas."
+          kicker="How we build"
+          kickerClass="bg-mint"
+          title="Low-code, not low standards."
+          description="We treat every canvas like real software, because for your team it is."
         />
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {props.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-card border border-line bg-surface/60 p-6 shadow-card">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-accent/25 bg-accent-soft text-accent-strong">
-                <Icon className="h-5 w-5" aria-hidden />
+        <div className="mt-12 grid gap-5 lg:grid-cols-4">
+          {props.map(({ icon: Icon, title, body, className, iconBg }, i) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ type: "spring", stiffness: 220, damping: 24, delay: i * 0.06 }}
+              whileHover={{ y: -4 }}
+              className={cn("pop rounded-card p-7", className)}
+            >
+              <span
+                className={cn(
+                  "inline-flex h-12 w-12 items-center justify-center rounded-xl border-2 border-ink shadow-pop-sm",
+                  iconBg,
+                )}
+              >
+                <Icon className="h-6 w-6 text-ink" strokeWidth={2.25} aria-hidden />
               </span>
-              <h3 className="mt-4 font-semibold text-fg">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-fg-muted">{body}</p>
-            </div>
+              <h3 className="mt-5 text-2xl font-bold tracking-tight text-ink">{title}</h3>
+              <p className="mt-2 leading-relaxed text-ink-soft">{body}</p>
+            </motion.div>
           ))}
         </div>
       </Container>

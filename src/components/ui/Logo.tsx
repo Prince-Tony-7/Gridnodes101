@@ -1,19 +1,17 @@
 import Link from "next/link";
 
-/** Wordmark with a minimal 2×2 node-grid glyph. */
+/** Wordmark: four coloured nodes wired together. */
 export function Logo() {
   return (
-    <Link href="/" className="group inline-flex items-center gap-2.5" aria-label="GridNodes home">
-      <svg viewBox="0 0 24 24" className="h-7 w-7" aria-hidden="true">
-        <rect x="2" y="2" width="8" height="8" rx="2" className="fill-accent" />
-        <rect x="14" y="2" width="8" height="8" rx="2" className="fill-logic" />
-        <rect x="2" y="14" width="8" height="8" rx="2" className="fill-logic/70" />
-        <rect x="14" y="14" width="8" height="8" rx="2" className="fill-accent/70" />
-        <path d="M10 6h4M6 10v4M18 10v4M10 18h4" className="stroke-fg-subtle" strokeWidth="1.5" />
+    <Link href="/" className="group inline-flex items-center gap-2" aria-label="GridNodes home">
+      <svg viewBox="0 0 32 32" className="h-8 w-8 transition-transform duration-300 group-hover:rotate-90" aria-hidden="true">
+        <path d="M9 9h14M9 9v14M23 9v14M9 23h14" stroke="var(--color-ink)" strokeWidth="2.5" />
+        <rect x="3" y="3" width="12" height="12" rx="3.5" fill="var(--color-coral)" stroke="var(--color-ink)" strokeWidth="2" />
+        <rect x="17" y="3" width="12" height="12" rx="6" fill="var(--color-sun)" stroke="var(--color-ink)" strokeWidth="2" />
+        <rect x="3" y="17" width="12" height="12" rx="6" fill="var(--color-sky)" stroke="var(--color-ink)" strokeWidth="2" />
+        <rect x="17" y="17" width="12" height="12" rx="3.5" fill="var(--color-mint)" stroke="var(--color-ink)" strokeWidth="2" />
       </svg>
-      <span className="text-lg font-semibold tracking-tight text-fg">
-        Grid<span className="text-accent-strong">Nodes</span>
-      </span>
+      <span className="font-display text-xl font-extrabold tracking-tight text-ink">gridnodes</span>
     </Link>
   );
 }

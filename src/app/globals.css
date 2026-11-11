@@ -2,72 +2,109 @@
 
 /* ---------------------------------------------------------------------------
  * GridNodes design tokens
- * Slate-based dark surface, emerald = "trigger / success" node accent,
- * indigo = "logic / AI" node accent. All tokens are exposed as Tailwind
- * utilities through @theme (e.g. bg-surface, text-fg-muted, border-line).
+ *
+ * Warm "paper" canvas, near-black ink, and a saturated node palette. Every
+ * department and every n8n node role owns a colour (see src/lib/palette.ts).
+ * Depth comes from ink outlines + hard offset shadows rather than glows.
  * ------------------------------------------------------------------------- */
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "DM Sans Variable", ui-sans-serif, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Surfaces */
-  --color-canvas: #0b1120; /* page background (deeper than slate-900) */
-  --color-surface: #0f172a; /* slate-900 */
-  --color-surface-raised: #1e293b; /* slate-800 */
-  --color-surface-sunken: #080d1a; /* code wells */
+  --color-paper: #fbf6ec;
+  --color-paper-deep: #f2e9d8;
+  --color-card: #fffdf8;
 
-  /* Lines */
-  --color-line: rgb(148 163 184 / 0.12);
-  --color-line-strong: rgb(148 163 184 / 0.24);
+  /* Ink */
+  --color-ink: #16130f;
+  --color-ink-soft: #4a443b;
+  --color-ink-mute: #7a7266;
 
-  /* Foreground */
-  --color-fg: #f1f5f9; /* slate-100 */
-  --color-fg-muted: #94a3b8; /* slate-400 */
-  --color-fg-subtle: #64748b; /* slate-500 */
+  /* Node palette */
+  --color-coral: #ff5a36;
+  --color-sun: #ffc738;
+  --color-mint: #1dbf98;
+  --color-sky: #3db2ff;
+  --color-violet: #7a5cff;
+  --color-pink: #ff77b7;
 
-  /* Brand accents */
-  --color-accent: #10b981; /* emerald-500 */
-  --color-accent-strong: #34d399; /* emerald-400 */
-  --color-accent-soft: rgb(16 185 129 / 0.12);
-  --color-logic: #6366f1; /* indigo-500 */
-  --color-logic-strong: #818cf8; /* indigo-400 */
-  --color-logic-soft: rgb(99 102 241 / 0.14);
-  --color-warn: #f59e0b;
-  --color-danger: #f43f5e;
+  /* Pale tints of the palette for large fills */
+  --color-coral-tint: #ffe1d8;
+  --color-sun-tint: #fff1c7;
+  --color-mint-tint: #d3f5ea;
+  --color-sky-tint: #d8efff;
+  --color-violet-tint: #e5deff;
+  --color-pink-tint: #ffe0ef;
 
-  /* Syntax highlighting */
-  --color-syntax-key: #818cf8;
-  --color-syntax-string: #34d399;
-  --color-syntax-number: #fbbf24;
-  --color-syntax-literal: #f472b6;
-  --color-syntax-punct: #64748b;
+  --color-danger: #e0301e;
 
-  --radius-card: 1rem;
+  /* Code panels stay dark for legibility */
+  --color-code: #1c1814;
+  --color-code-line: #3a332b;
+  --color-syntax-key: #9d8bff;
+  --color-syntax-string: #5fe0b9;
+  --color-syntax-number: #ffd166;
+  --color-syntax-literal: #ff8fc6;
+  --color-syntax-punct: #8a8174;
 
-  --shadow-glow: 0 0 0 1px rgb(16 185 129 / 0.25), 0 8px 40px -12px rgb(16 185 129 / 0.35);
-  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -24px rgb(0 0 0 / 0.6);
+  --radius-card: 1.25rem;
+
+  --shadow-pop-sm: 2px 2px 0 0 var(--color-ink);
+  --shadow-pop: 4px 4px 0 0 var(--color-ink);
+  --shadow-pop-lg: 8px 8px 0 0 var(--color-ink);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-wiggle: wiggle 2.8s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
 }
 
 @layer base {
   html {
-    color-scheme: dark;
+    color-scheme: light;
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--color-canvas);
-    color: var(--color-fg);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
   ::selection {
-    background: rgb(16 185 129 / 0.3);
+    background: var(--color-sun);
+    color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent-strong);
+    outline: 3px solid var(--color-violet);
     outline-offset: 2px;
   }
 
@@ -75,33 +112,36 @@
     html {
       scroll-behavior: auto;
     }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+    }
   }
 }
 
 @layer components {
-  /* Glassmorphism panel used by the sticky header and modal chrome. */
-  .glass {
-    background: rgb(15 23 42 / 0.65);
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  /* Outlined "sticker" surface used for cards, panels and buttons. */
+  .pop {
+    border: 2px solid var(--color-ink);
+    box-shadow: var(--shadow-pop);
   }
 
-  /* Subtle node-grid background evoking the n8n canvas. */
-  .bg-node-grid {
-    background-image: radial-gradient(rgb(148 163 184 / 0.14) 1px, transparent 1px);
-    background-size: 24px 24px;
+  /* Dotted canvas texture, a nod to the n8n editor. */
+  .bg-dots {
+    background-image: radial-gradient(rgb(22 19 15 / 0.16) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
   }
 
-  .text-gradient {
-    background: linear-gradient(90deg, var(--color-accent-strong), var(--color-logic-strong));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* Highlighter stroke behind a word. */
+  .marker {
+    background-image: linear-gradient(transparent 58%, var(--marker, var(--color-sun)) 58%, var(--marker, var(--color-sun)) 92%, transparent 92%);
+    padding-inline: 0.08em;
   }
 }
 
-/* Thin, unobtrusive scrollbars for code panels. */
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgb(148 163 184 / 0.25) transparent;
+  scrollbar-color: rgb(255 255 255 / 0.2) transparent;
 }

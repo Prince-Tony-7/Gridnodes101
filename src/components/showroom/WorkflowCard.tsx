@@ -1,10 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, Layers } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { cn } from "@/lib/cn";
+import { complexityColor, departmentColor } from "@/lib/palette";
 import type { Workflow } from "@/lib/types";
+import { nodeKindStyles } from "./nodeKind";
 
 interface WorkflowCardProps {
   workflow: Workflow;
@@ -13,48 +16,63 @@ interface WorkflowCardProps {
 }
 
 const cardClass =
-  "group relative flex h-full w-full flex-col rounded-card border border-line bg-surface/70 p-6 text-left shadow-card transition-colors hover:border-accent/40 focus-visible:border-accent/60";
+  "group pop relative flex h-full w-full flex-col overflow-hidden rounded-card bg-card text-left transition-shadow duration-200 hover:shadow-pop-lg";
+
+/** Miniature of the workflow: one coloured dot per node, wired in sequence. */
+function NodeStrip({ workflow }: { workflow: Workflow }) {
+  return (
+    <div className="flex items-center" aria-hidden>
+      {workflow.nodes.map((n, i) => (
+        <span key={n.id} className="flex items-center">
+          {i > 0 && <span className="h-0.5 w-3 bg-ink sm:w-4" />}
+          <span
+            className={cn(
+              "h-4 w-4 rounded-[5px] border-2 border-ink transition-transform duration-300 group-hover:-translate-y-1",
+              nodeKindStyles[n.kind].solid,
+            )}
+            style={{ transitionDelay: `${i * 35}ms` }}
+          />
+        </span>
+      ))}
+    </div>
+  );
+}
 
 function CardBody({ workflow }: { workflow: Workflow }) {
-  const primaryMetric = workflow.roi.metrics[0];
+  const metric = workflow.roi.metrics[0];
+  const dept = departmentColor[workflow.department];
+
   return (
     <>
-      <div className="flex items-center justify-between gap-3">
+      <div className={cn("flex items-center justify-between gap-3 border-b-2 border-ink px-5 py-4", dept.solid)}>
+        <NodeStrip workflow={workflow} />
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-card transition-transform duration-300 group-hover:rotate-45">
+          <ArrowUpRight className="h-4 w-4" aria-hidden />
+        </span>
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="logic">{workflow.department}</Badge>
-          <Badge tone={workflow.complexity === "Advanced" ? "warn" : "accent"}>{workflow.complexity}</Badge>
+          <Badge className={dept.tint}>{workflow.department}</Badge>
+          <Badge className={complexityColor[workflow.complexity]}>{workflow.complexity}</Badge>
         </div>
-        <ArrowUpRight
-          className="h-5 w-5 shrink-0 text-fg-subtle transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-strong"
-          aria-hidden
-        />
-      </div>
 
-      <h3 className="mt-5 text-lg font-semibold tracking-tight text-fg">{workflow.title}</h3>
-      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-fg-muted">{workflow.tagline}</p>
+        <h3 className="mt-4 text-2xl leading-tight font-bold tracking-tight text-ink">{workflow.title}</h3>
+        <p className="mt-2 line-clamp-3 leading-relaxed text-ink-soft">{workflow.tagline}</p>
 
-      <div className="mt-5 flex flex-wrap gap-1.5">
-        {workflow.integrations.map((i) => (
-          <span key={i} className="rounded border border-line px-1.5 py-0.5 font-mono text-[11px] text-fg-muted">
-            {i}
-          </span>
-        ))}
-      </div>
+        <p className="mt-4 text-sm text-ink-mute">
+          {workflow.integrations.join(" · ")}
+        </p>
 
-      <div className="mt-auto flex items-end justify-between gap-4 border-t border-line pt-5">
-        {primaryMetric && (
-          <div>
-            <p className="text-xl font-semibold text-accent-strong">{primaryMetric.value}</p>
-            <p className="text-xs text-fg-subtle">
-              {primaryMetric.label}
-              {primaryMetric.context ? ` · ${primaryMetric.context}` : ""}
-            </p>
+        {metric && (
+          <div className={cn("mt-5 flex items-baseline gap-2 rounded-xl border-2 border-dashed border-ink/40 px-4 py-3", dept.tint)}>
+            <span className="font-display text-3xl font-extrabold tracking-tight text-ink">{metric.value}</span>
+            <span className="text-sm leading-tight font-medium text-ink-soft">
+              {metric.label.toLowerCase()}
+              {metric.context ? ` ${metric.context}` : ""}
+            </span>
           </div>
         )}
-        <span className="inline-flex items-center gap-1 font-mono text-xs text-fg-subtle">
-          <Layers className="h-3.5 w-3.5" aria-hidden />
-          {workflow.nodes.length} nodes
-        </span>
       </div>
     </>
   );
@@ -62,7 +80,11 @@ function CardBody({ workflow }: { workflow: Workflow }) {
 
 export function WorkflowCard({ workflow, onSelect }: WorkflowCardProps) {
   return (
-    <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.2 }} className="h-full">
+    <motion.div
+      whileHover={{ y: -6, rotate: -0.6 }}
+      transition={{ type: "spring", stiffness: 380, damping: 22 }}
+      className="h-full"
+    >
       {onSelect ? (
         <button
           type="button"

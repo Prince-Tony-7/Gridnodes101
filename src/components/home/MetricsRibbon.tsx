@@ -1,8 +1,9 @@
 "use client";
 
-import { animate, useInView, useReducedMotion } from "framer-motion";
+import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/cn";
 
 interface Metric {
   label: string;
@@ -10,6 +11,9 @@ interface Metric {
   suffix?: string;
   decimals?: number;
 }
+
+const COLORS = ["bg-sun", "bg-sky", "bg-pink", "bg-mint"];
+const TILTS = ["-rotate-1", "rotate-1", "-rotate-[0.5deg]", "rotate-[1.5deg]"];
 
 function formatNumber(n: number, decimals = 0) {
   return n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
@@ -24,7 +28,7 @@ function CountUp({ value, decimals = 0, suffix = "" }: Omit<Metric, "label">) {
   useEffect(() => {
     if (!inView || reduce) return;
     const controls = animate(0, value, {
-      duration: 1.4,
+      duration: 1.6,
       ease: [0.22, 1, 0.36, 1],
       onUpdate: (v) => setDisplay(formatNumber(v, decimals)),
     });
@@ -41,16 +45,20 @@ function CountUp({ value, decimals = 0, suffix = "" }: Omit<Metric, "label">) {
 
 export function MetricsRibbon({ metrics }: { metrics: readonly Metric[] }) {
   return (
-    <section aria-label="Portfolio metrics" className="border-y border-line bg-surface/60">
+    <section aria-label="Portfolio metrics" className="py-10">
       <Container>
-        <dl className="grid grid-cols-2 divide-line md:grid-cols-4 md:divide-x">
-          {metrics.map((m) => (
-            <div key={m.label} className="flex flex-col items-center gap-1 px-4 py-8 text-center">
-              <dt className="order-2 font-mono text-xs tracking-wider text-fg-subtle uppercase">{m.label}</dt>
-              <dd className="order-1 text-3xl font-semibold tracking-tight text-fg sm:text-4xl">
+        <dl className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+          {metrics.map((m, i) => (
+            <motion.div
+              key={m.label}
+              whileHover={{ rotate: 0, y: -4 }}
+              className={cn("pop flex flex-col rounded-card p-5 sm:p-6", COLORS[i % COLORS.length], TILTS[i % TILTS.length])}
+            >
+              <dt className="order-2 mt-1 text-sm font-semibold text-ink/75">{m.label}</dt>
+              <dd className="order-1 font-display text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
                 <CountUp value={m.value} suffix={m.suffix} decimals={m.decimals} />
               </dd>
-            </div>
+            </motion.div>
           ))}
         </dl>
       </Container>

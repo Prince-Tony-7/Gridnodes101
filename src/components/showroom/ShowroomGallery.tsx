@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { SearchX } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useRef } from "react";
 import { useWorkflowFilters } from "@/hooks/useWorkflowFilters";
@@ -68,7 +67,7 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
         onReset={f.reset}
       />
 
-      <motion.ul layout className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <motion.ul layout className="mt-10 grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {f.results.map((w) => (
             <motion.li
@@ -87,14 +86,16 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
       </motion.ul>
 
       {f.results.length === 0 && (
-        <div className="mt-8 flex flex-col items-center rounded-card border border-dashed border-line-strong px-6 py-16 text-center">
-          <SearchX className="h-8 w-8 text-fg-subtle" aria-hidden />
-          <p className="mt-4 font-medium text-fg">No workflows match these filters.</p>
-          <p className="mt-1 text-sm text-fg-muted">Try removing an integration or clearing your search.</p>
+        <div className="pop mt-8 flex flex-col items-center rounded-card bg-sun-tint px-6 py-16 text-center">
+          <span className="inline-block animate-wiggle text-5xl" aria-hidden>
+            🔌
+          </span>
+          <p className="mt-4 font-display text-2xl font-bold text-ink">Nothing wired up for that combo yet.</p>
+          <p className="mt-1 text-ink-soft">Drop a filter, or tell us what you need and we&rsquo;ll build it.</p>
           <button
             type="button"
             onClick={f.reset}
-            className="mt-5 rounded-md border border-line-strong px-3 py-1.5 text-sm text-fg hover:bg-surface-raised"
+            className="mt-6 rounded-full border-2 border-ink bg-card px-4 py-2 font-semibold shadow-pop-sm hover:bg-sun"
           >
             Reset filters
           </button>

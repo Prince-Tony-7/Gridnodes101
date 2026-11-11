@@ -5,6 +5,8 @@ import { Cpu, Map as MapIcon, TrendingUp, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Tabs, type TabItem } from "@/components/ui/Tabs";
+import { cn } from "@/lib/cn";
+import { complexityColor, departmentColor } from "@/lib/palette";
 import type { Workflow } from "@/lib/types";
 import { JsonCodePanel } from "./JsonCodePanel";
 import { NodeExplainer } from "./NodeExplainer";
@@ -13,9 +15,9 @@ import { VisualMapPlaceholder } from "./VisualMapPlaceholder";
 type TabId = "map" | "roi" | "specs";
 
 const TABS: readonly TabItem<TabId>[] = [
-  { id: "map", label: "Visual Map", icon: <MapIcon className="h-4 w-4" aria-hidden /> },
-  { id: "roi", label: "Business ROI", icon: <TrendingUp className="h-4 w-4" aria-hidden /> },
-  { id: "specs", label: "Technical Specs", icon: <Cpu className="h-4 w-4" aria-hidden /> },
+  { id: "map", label: "Visual Map", icon: <MapIcon className="h-4 w-4" aria-hidden />, color: "bg-sky" },
+  { id: "roi", label: "Business ROI", icon: <TrendingUp className="h-4 w-4" aria-hidden />, color: "bg-mint" },
+  { id: "specs", label: "Technical Specs", icon: <Cpu className="h-4 w-4" aria-hidden />, color: "bg-sun" },
 ];
 
 const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
@@ -84,7 +86,7 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-hidden />
+      <div className="absolute inset-0 bg-ink/60 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
 
       <motion.div
         ref={dialogRef}
@@ -92,23 +94,25 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        initial={{ opacity: 0, y: 24, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 16, scale: 0.98 }}
-        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-        className="relative flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-2xl border border-line-strong bg-surface shadow-2xl focus:outline-none sm:rounded-2xl"
+        initial={{ opacity: 0, y: 60, rotate: 1.5 }}
+        animate={{ opacity: 1, y: 0, rotate: 0 }}
+        exit={{ opacity: 0, y: 40, rotate: -1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 28 }}
+        className="relative flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-3xl border-2 border-ink bg-paper shadow-pop-lg focus:outline-none sm:rounded-3xl"
       >
         {/* Header */}
-        <div className="glass sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-line px-6 py-5">
-          <div className="min-w-0 space-y-2">
+        <div
+          className={cn(
+            "sticky top-0 z-10 flex items-start justify-between gap-4 border-b-2 border-ink px-6 py-5",
+            departmentColor[workflow.department].solid,
+          )}
+        >
+          <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="logic">{workflow.department}</Badge>
-              <Badge tone={workflow.complexity === "Advanced" ? "warn" : "accent"}>{workflow.complexity}</Badge>
-              {workflow.tags.map((t) => (
-                <Badge key={t}>{t}</Badge>
-              ))}
+              <Badge>{workflow.department}</Badge>
+              <Badge className={complexityColor[workflow.complexity]}>{workflow.complexity}</Badge>
             </div>
-            <h2 id={titleId} className="text-xl font-semibold tracking-tight text-fg sm:text-2xl">
+            <h2 id={titleId} className="text-2xl leading-tight font-extrabold tracking-tight text-ink sm:text-3xl">
               {workflow.title}
             </h2>
           </div>
@@ -116,7 +120,7 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
             type="button"
             onClick={onClose}
             aria-label="Close workflow details"
-            className="rounded-md p-1.5 text-fg-muted transition-colors hover:bg-surface-raised hover:text-fg"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-card shadow-pop-sm transition-transform hover:rotate-90"
           >
             <X className="h-5 w-5" />
           </button>
@@ -124,12 +128,19 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
 
         {/* Body */}
         <div className="scrollbar-thin overflow-y-auto px-6 py-6">
-          <p className="max-w-3xl text-sm leading-relaxed text-fg-muted">{workflow.description}</p>
+          <p className="max-w-3xl text-lg leading-relaxed text-ink-soft">{workflow.description}</p>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {workflow.tags.map((t) => (
+              <li key={t} className="rounded-full border border-ink/30 bg-card px-3 py-0.5 text-sm text-ink-soft">
+                #{t.toLowerCase().replace(/\s+/g, "-")}
+              </li>
+            ))}
+          </ul>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
             <section aria-labelledby={`${titleId}-nodes`}>
-              <h3 id={`${titleId}-nodes`} className="mb-3 font-mono text-xs tracking-wider text-fg-subtle uppercase">
-                Node-by-node walkthrough
+              <h3 id={`${titleId}-nodes`} className="mb-4 text-xl font-bold text-ink">
+                How it works, node by node
               </h3>
               <NodeExplainer nodes={workflow.nodes} />
             </section>
@@ -156,22 +167,30 @@ function ModalContent({ workflow, onClose }: { workflow: Workflow; onClose: () =
   );
 }
 
+const ROI_COLORS = ["bg-sun", "bg-mint", "bg-sky", "bg-pink"];
+
 function RoiPanel({ workflow }: { workflow: Workflow }) {
   return (
     <div className="space-y-5">
-      <p className="text-lg font-semibold text-fg">{workflow.roi.headline}</p>
+      <p className="font-display text-2xl leading-tight font-extrabold text-ink">{workflow.roi.headline}</p>
       <dl className="grid grid-cols-2 gap-3">
-        {workflow.roi.metrics.map((m) => (
-          <div key={m.label} className="rounded-lg border border-line bg-surface-sunken p-4">
-            <dd className="text-2xl font-semibold tracking-tight text-accent-strong">{m.value}</dd>
-            <dt className="mt-1 text-xs text-fg-muted">
+        {workflow.roi.metrics.map((m, i) => (
+          <motion.div
+            key={m.label}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 360, damping: 24, delay: i * 0.06 }}
+            className={cn("flex flex-col rounded-xl border-2 border-ink p-4 shadow-pop-sm", ROI_COLORS[i % ROI_COLORS.length])}
+          >
+            <dd className="order-1 font-display text-3xl font-extrabold tracking-tight text-ink">{m.value}</dd>
+            <dt className="order-2 mt-1 text-sm font-semibold text-ink/80">
               {m.label}
-              {m.context && <span className="block text-fg-subtle">{m.context}</span>}
+              {m.context && <span className="block font-normal text-ink/65">{m.context}</span>}
             </dt>
-          </div>
+          </motion.div>
         ))}
       </dl>
-      <p className="text-sm leading-relaxed text-fg-muted">{workflow.roi.narrative}</p>
+      <p className="leading-relaxed text-ink-soft">{workflow.roi.narrative}</p>
     </div>
   );
 }
@@ -190,7 +209,7 @@ function SpecsPanel({ workflow }: { workflow: Workflow }) {
       <ul key="creds" className="flex flex-wrap gap-1.5">
         {specs.credentials.map((c) => (
           <li key={c}>
-            <Badge>{c}</Badge>
+            <Badge className="bg-sun-tint">{c}</Badge>
           </li>
         ))}
       </ul>,
@@ -198,11 +217,11 @@ function SpecsPanel({ workflow }: { workflow: Workflow }) {
   ];
 
   return (
-    <dl className="divide-y divide-line overflow-hidden rounded-lg border border-line">
+    <dl className="pop divide-y-2 divide-ink/10 overflow-hidden rounded-2xl bg-card">
       {rows.map(([label, value]) => (
-        <div key={label} className="grid gap-1 px-4 py-3 sm:grid-cols-[140px_1fr] sm:gap-4">
-          <dt className="font-mono text-xs tracking-wide text-fg-subtle uppercase">{label}</dt>
-          <dd className="text-sm text-fg">{value}</dd>
+        <div key={label} className="grid gap-1 px-4 py-3 sm:grid-cols-[130px_1fr] sm:gap-4">
+          <dt className="text-sm font-bold text-ink">{label}</dt>
+          <dd className="text-sm text-ink-soft">{value}</dd>
         </div>
       ))}
     </dl>
