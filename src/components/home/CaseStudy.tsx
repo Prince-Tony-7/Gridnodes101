@@ -20,7 +20,7 @@ export function CaseStudy() {
             kicker="Case study"
             kickerClass="bg-coral"
             title="Monthly billing and exception reporting, automated."
-            description="Anonymised: a Dublin medical device company. Monthly billing and exception reporting from manual Excel exports, automated with n8n."
+            description="Anonymised: an Irish medical device company. Monthly billing and exception reporting from manual Excel exports, automated with n8n."
           />
           <Reveal delay={0.1} className="shrink-0">
             <ButtonLink href="/case-study" variant="secondary">

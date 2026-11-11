@@ -1,5 +1,5 @@
 /**
- * Case study: three n8n workflows I built for my employer, a Dublin medical
+ * Case study: three n8n workflows I built for my employer, an Irish medical
  * device company. ANONYMISED: node labels are generic, and no code, prices,
  * site names, product names, system names or data fields are included.
  *

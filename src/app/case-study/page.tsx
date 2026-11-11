@@ -11,7 +11,7 @@ import { caseStudyOutcomes, caseStudyResultTime, caseStudyTools, caseStudyWorkfl
 export const metadata: Metadata = {
   title: "Case Study: Billing and Exception Reporting",
   description:
-    "Anonymised case study: three n8n workflows that turn manual Excel exports into exception reports, monthly billing workbooks and categorised daily sheets for a Dublin medical device company.",
+    "Anonymised case study: three n8n workflows that turn manual Excel exports into exception reports, monthly billing workbooks and categorised daily sheets for an Irish medical device company.",
 };
 
 export default function CaseStudyPage() {
@@ -25,7 +25,7 @@ export default function CaseStudyPage() {
           kicker="Case study"
           kickerClass="bg-coral"
           title="Billing and exception reporting from Excel exports, automated."
-          description="Anonymised: a Dublin medical device company. Monthly billing and exception reporting from manual Excel exports, automated with three n8n workflows."
+          description="Anonymised: an Irish medical device company. Monthly billing and exception reporting from manual Excel exports, automated with three n8n workflows."
         />
 
         <Reveal delay={0.1} className="mt-6 flex max-w-3xl items-start gap-2 rounded-lg border border-line bg-card px-4 py-3 text-sm text-ink-soft">
