@@ -32,6 +32,19 @@ and allow the site's origin in the Webhook node's CORS ("Allowed Origins") optio
 Without it, the form shows a "not connected yet" message instead of submitting.
 For local dev, set `NEXT_PUBLIC_INTAKE_WEBHOOK_URL` in `.env.local`.
 
+## Demo videos
+
+Demo recordings live in `src/data/demosData.ts` and appear on `/demos` and the home page. To publish one, set `source` on its entry:
+
+| Host | `source` value |
+| --- | --- |
+| YouTube | `{ kind: "youtube", id: "VIDEO_ID" }` (the part after `?v=`) |
+| Vimeo | `{ kind: "vimeo", id: "123456789" }` |
+| Loom | `{ kind: "loom", id: "SHARE_ID" }` (the part after `/share/`) |
+| Video file | `{ kind: "file", src: "/videos/my-demo.mp4" }`, with the file in `public/videos/` |
+
+Add `poster: "/videos/my-demo.jpg"` for a custom thumbnail. Entries without a `source` show a "Recording coming soon" poster. Players load only when a visitor presses play. Prefer YouTube, Vimeo or Loom for anything over a few MB: GitHub limits file sizes and Pages is not built for video streaming.
+
 ## Structure
 
 ```

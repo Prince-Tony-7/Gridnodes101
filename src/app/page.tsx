@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { DemoTheater } from "@/components/demos/DemoTheater";
 import { Hero } from "@/components/home/Hero";
 import { IntegrationsMarquee } from "@/components/home/IntegrationsMarquee";
 import { MetricsRibbon } from "@/components/home/MetricsRibbon";
@@ -10,10 +11,11 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { globalMetrics } from "@/data/workflowsData";
+import { getAllDemos } from "@/lib/demos";
 import { getAllWorkflows } from "@/lib/workflows";
 
 export default async function HomePage() {
-  const workflows = await getAllWorkflows();
+  const [workflows, demos] = await Promise.all([getAllWorkflows(), getAllDemos()]);
 
   return (
     <>
@@ -43,6 +45,27 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </ul>
+        </Container>
+      </section>
+
+      <section className="pb-28">
+        <Container>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeading
+              kicker="See it running"
+              kickerClass="bg-coral"
+              title="Watch the workflows in action."
+              description="Short screen recordings of each automation, from the trigger firing to the result landing in your tools."
+            />
+            <Reveal delay={0.1} className="shrink-0">
+              <ButtonLink href="/demos" variant="secondary">
+                All demos <ArrowRight className="h-4 w-4" aria-hidden />
+              </ButtonLink>
+            </Reveal>
+          </div>
+          <Reveal className="mt-12" delay={0.1}>
+            <DemoTheater demos={demos.slice(0, 4)} />
+          </Reveal>
         </Container>
       </section>
 

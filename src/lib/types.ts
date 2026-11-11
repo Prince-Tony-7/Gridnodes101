@@ -85,3 +85,30 @@ export interface WorkflowFilters {
   integrations: Integration[];
   complexity: Complexity | null;
 }
+
+/** Where a demo recording is hosted. */
+export type VideoSource =
+  | { kind: "youtube"; id: string }
+  | { kind: "vimeo"; id: string }
+  | { kind: "loom"; id: string }
+  /** A file in /public, e.g. "/videos/lead-router.mp4". */
+  | { kind: "file"; src: string };
+
+export interface DemoVideo {
+  slug: string;
+  title: string;
+  summary: string;
+  department: Department;
+  /** e.g. "2:45" */
+  duration: string;
+  /** Tools shown in the video. */
+  integrations: string[];
+  /** Steps drawn on the poster while no thumbnail is set. */
+  steps: Array<{ label: string; kind: NodeKind }>;
+  /** Optional poster image in /public, e.g. "/videos/lead-router.jpg". */
+  poster?: string;
+  /** Leave undefined until the recording is ready: the card shows "coming soon". */
+  source?: VideoSource;
+  /** Links the demo to a showroom workflow, if there is one. */
+  workflowSlug?: string;
+}
