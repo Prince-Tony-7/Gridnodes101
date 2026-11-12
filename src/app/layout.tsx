@@ -10,6 +10,28 @@ import { Navbar } from "@/components/layout/Navbar";
 import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { siteConfig } from "@/lib/site";
 
+/**
+ * Content Security Policy. GitHub Pages can't send HTTP headers, so this is
+ * delivered as a <meta> tag (production builds only: the dev server needs eval).
+ * Only the site itself, the Apps Script enquiry endpoint (which redirects to
+ * googleusercontent.com) and, for demo videos, the three video hosts are allowed.
+ */
+const CSP = [
+  "default-src 'self'",
+  // Next.js static export bootstraps with inline scripts.
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self' data:",
+  "media-src 'self'",
+  "connect-src 'self' https://script.google.com https://script.googleusercontent.com",
+  "frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.loom.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
 export const metadata: Metadata = {
   // Absolute base for share-image URLs. Set SITE_URL when moving to a custom domain.
   metadataBase: new URL(process.env.SITE_URL ?? "https://prince-tony-7.github.io"),
@@ -24,6 +46,8 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image", title: siteConfig.title, description: siteConfig.description },
+  referrer: "strict-origin-when-cross-origin",
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
 export const viewport: Viewport = {
@@ -33,7 +57,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-IE">
+      <head>
+        {process.env.NODE_ENV === "production" && <meta httpEquiv="Content-Security-Policy" content={CSP} />}
+        {/* Without JavaScript, scroll-reveal animations never run: show that content anyway. */}
+        <noscript>
+          <style>{`[style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"

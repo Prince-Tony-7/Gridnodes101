@@ -46,6 +46,9 @@ export function Footer() {
             <a href={siteConfig.owner.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-paper">
               LinkedIn
             </a>
+            <Link href="/privacy" className="inline-flex min-h-11 items-center hover:text-paper">
+              Privacy
+            </Link>
           </p>
         </div>
       </Container>

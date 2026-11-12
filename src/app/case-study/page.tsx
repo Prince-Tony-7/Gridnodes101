@@ -7,8 +7,10 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { caseStudyOutcomes, caseStudyResultTime, caseStudyTools, caseStudyWorkflows } from "@/data/caseStudyData";
+import { absoluteUrl } from "@/lib/url";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/case-study/") },
   title: "Case Study: Billing and Exception Reporting",
   description:
     "Anonymised case study: three n8n workflows that turn manual Excel exports into exception reports, monthly billing workbooks and categorised daily sheets for an Irish medical device company.",

@@ -6,8 +6,12 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getAllDemos } from "@/lib/demos";
 import { siteConfig } from "@/lib/site";
+import { absoluteUrl } from "@/lib/url";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/demos/") },
+  // Keep the page out of search results while the feature is switched off.
+  robots: { index: siteConfig.features.demos, follow: true },
   title: "Demo Videos",
   description: "Screen recordings of GridNodes example automations running end to end.",
 };

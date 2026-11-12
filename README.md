@@ -66,6 +66,63 @@ Add `poster: "/videos/my-demo.jpg"` for a custom thumbnail. Entries without a `s
 - **Case study figures:** fill in `caseStudyResultTime` in `src/data/caseStudyData.ts` with measured before/after times. The time panel only appears when both are set.
 - **Case study diagrams:** `src/data/caseStudyData.ts` holds anonymised layouts of the three real workflows (positions and connections from the n8n exports, generic labels). Never paste raw exports in: they contain credentials, customer sites, prices and data fields.
 
+## Security, privacy and running the site
+
+What's in place:
+
+- **Content Security Policy** (`src/app/layout.tsx`, moved to the top of every page by `scripts/hoist-csp.mjs` after each build). Only this site, the Apps Script endpoint (`script.google.com` → `script.googleusercontent.com`) and the three demo-video hosts are allowed. Add any new third-party service here or it will be blocked.
+- **No cookies, analytics or third-party scripts**; fonts are self-hosted. A privacy notice lives at `/privacy` (retention period in `siteConfig.privacy`).
+- **Contact form**: honeypot field, a minimum fill time (instant submissions are dropped), length limits, a 15-second timeout, and an email fallback if sending fails.
+- **Deploy gate**: the GitHub Action runs lint, type-check and `npm audit` (high severity) before building, so a broken or vulnerable change can't go live. Dependabot (`.github/dependabot.yml`) opens a grouped update PR monthly.
+- **SEO**: canonical URLs, `sitemap.xml`, structured data (ProfessionalService), Open Graph images, and `noindex` on `/demos` while it's switched off.
+- **Accessibility**: checked against WCAG 2.1 AA with axe; works without JavaScript.
+
+### Hardening the Apps Script
+
+The site already filters bots, but anyone can call the script URL directly, so the script should validate too. Recommended `doPost`:
+
+```js
+const MAX = { name: 100, email: 254, message: 3000, source: 200 };
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    if (data._gotcha) return json({ ok: true }); // bot: pretend success, store nothing
+
+    // Trim, cap length, and stop spreadsheet formula injection (=, +, -, @).
+    const clean = (k) => {
+      const v = String(data[k] || "").trim().slice(0, MAX[k]);
+      return /^[=+\-@]/.test(v) ? "'" + v : v;
+    };
+    const name = clean("name"), email = clean("email"), message = clean("message"), source = clean("source");
+    if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || message.length < 10) {
+      return json({ ok: false, error: "invalid" });
+    }
+
+    // Basic rate limit: at most 10 enquiries per 10 minutes.
+    const cache = CacheService.getScriptCache();
+    const count = Number(cache.get("recent") || 0);
+    if (count >= 10) return json({ ok: false, error: "busy" });
+    cache.put("recent", String(count + 1), 600);
+
+    // ...append to your sheet and/or email yourself here (treat every field as plain text)...
+    return json({ ok: true });
+  } catch (err) {
+    return json({ ok: false, error: "bad request" });
+  }
+}
+
+function json(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+### GitHub Pages settings
+
+- **Settings → Pages → Source: GitHub Actions.** While it's set to "Deploy from a branch", every push also triggers a README-only deploy that races the real one.
+- Keep **Enforce HTTPS** on.
+- `robots.txt` only takes effect at a domain root. With a custom domain, set `SITE_URL` (and drop `BASE_PATH`) in the deploy workflow; until then, submit `https://prince-tony-7.github.io/Gridnodes101/sitemap.xml` in Google Search Console.
+
 ## Structure
 
 ```
@@ -75,6 +132,8 @@ src/
 │  ├─ showroom/page.tsx      Example workflows, filterable (deep links: ?workflow=<slug>)
 │  ├─ about/page.tsx         About Prince Tony
 │  ├─ case-study/page.tsx    Case study with anonymised workflow canvases
+│  ├─ privacy/page.tsx       Privacy notice
+│  ├─ sitemap.ts, robots.ts, manifest.ts   SEO + app metadata
 │  ├─ demos/page.tsx         Demo videos (behind features.demos)
 │  ├─ contact/page.tsx       Contact form (Apps Script + mailto fallback)
 │  └─ globals.css            Design tokens (@theme): paper/ink surfaces, node palette, pop shadows

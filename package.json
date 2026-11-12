@@ -2,13 +2,14 @@
   "name": "gridnodes",
   "version": "0.1.0",
   "private": true,
-  "description": "GridNodes — production-ready n8n automation portfolio.",
+  "description": "GridNodes \u2014 production-ready n8n automation portfolio.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "preview": "npx --yes serve@14.2.4 out",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postbuild": "node scripts/hoist-csp.mjs"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "5.3.0",

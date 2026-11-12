@@ -69,6 +69,7 @@ export function ShowroomGallery({ workflows }: { workflows: Workflow[] }) {
         onReset={f.reset}
       />
 
+      <h2 className="sr-only">Workflows</h2>
       <motion.ul layout className="mt-10 grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {f.results.map((w) => (

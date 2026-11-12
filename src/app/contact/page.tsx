@@ -4,8 +4,10 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/cn";
+import { absoluteUrl } from "@/lib/url";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/contact/") },
   title: "Contact",
   description: "Tell me which repetitive admin job takes up too much of your time, and I'll tell you honestly whether it's worth automating.",
 };

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { DemoTheater } from "@/components/demos/DemoTheater";
 import { AboutTeaser } from "@/components/home/AboutTeaser";
@@ -14,13 +15,40 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getAllDemos } from "@/lib/demos";
 import { siteConfig } from "@/lib/site";
+import { absoluteUrl } from "@/lib/url";
 import { getAllWorkflows } from "@/lib/workflows";
+
+export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/") },
+};
+
+/** Structured data so search engines understand who GridNodes is and where it operates. */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: siteConfig.name,
+  url: absoluteUrl("/"),
+  logo: absoluteUrl("/icon.svg"),
+  image: absoluteUrl("/opengraph-image.png"),
+  description: siteConfig.description,
+  email: siteConfig.owner.email,
+  areaServed: { "@type": "Country", name: "Ireland" },
+  address: { "@type": "PostalAddress", addressLocality: "Dublin", addressCountry: "IE" },
+  founder: { "@type": "Person", name: siteConfig.owner.name, sameAs: [siteConfig.owner.linkedin] },
+  sameAs: [siteConfig.owner.linkedin],
+  knowsAbout: ["n8n", "Workflow automation", "Google Sheets", "Excel", "Gmail automation"],
+};
 
 export default async function HomePage() {
   const [workflows, demos] = await Promise.all([getAllWorkflows(), getAllDemos()]);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static data only; "<" is escaped so the JSON can never close the script tag.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <Hero />
       <IntegrationsMarquee />
       <Services />

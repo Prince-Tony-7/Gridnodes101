@@ -2,10 +2,11 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Loader2, Mail, Send } from "lucide-react";
-import { useState, type FormEvent, type ReactNode } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { buttonBase, buttonStyles } from "@/components/ui/ButtonLink";
 import { cn } from "@/lib/cn";
-import { validateContact, type ContactErrors, type ContactPayload } from "@/lib/contact";
+import { CONTACT_LIMITS, validateContact, type ContactErrors, type ContactPayload } from "@/lib/contact";
 import { siteConfig } from "@/lib/site";
 
 /**
@@ -15,6 +16,9 @@ import { siteConfig } from "@/lib/site";
  */
 const ENQUIRY_ENDPOINT: string = siteConfig.enquiryEndpoint;
 const ENDPOINT_READY = ENQUIRY_ENDPOINT.trim() !== "";
+/** Submissions faster than this after the page loads are almost certainly bots. */
+const MIN_FILL_MS = 3000;
+const REQUEST_TIMEOUT_MS = 15000;
 const EMAIL = siteConfig.owner.email;
 
 const INITIAL: ContactPayload = { name: "", email: "", message: "", source: "", _gotcha: "" };
@@ -66,6 +70,11 @@ export function ContactForm() {
   const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState<string | null>(null);
+  const loadedAt = useRef<number | null>(null);
+
+  useEffect(() => {
+    loadedAt.current = Date.now();
+  }, []);
 
   const set = <K extends keyof ContactPayload>(key: K, value: ContactPayload[K]) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -81,6 +90,7 @@ export function ContactForm() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (status === "submitting") return;
     setServerError(null);
     const found = validateContact(values);
     setErrors(found);
@@ -91,7 +101,8 @@ export function ContactForm() {
     }
 
     // Bots fill the hidden honeypot: pretend it worked and send nothing.
-    if (values._gotcha) {
+    const tooFast = loadedAt.current !== null && Date.now() - loadedAt.current < MIN_FILL_MS;
+    if (values._gotcha || tooFast) {
       setStatus("success");
       return;
     }
@@ -105,8 +116,11 @@ export function ContactForm() {
     setStatus("submitting");
     try {
       // text/plain keeps this a "simple" CORS request (no preflight), which Apps Script requires.
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       const res = await fetch(ENQUIRY_ENDPOINT, {
         method: "POST",
+        signal: controller.signal,
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
           name: values.name,
@@ -117,6 +131,7 @@ export function ContactForm() {
         }),
       });
       const data: unknown = await res.json().catch(() => null);
+      clearTimeout(timer);
       const ok = res.ok && typeof data === "object" && data !== null && (data as { ok?: unknown }).ok === true;
       if (!ok) throw new Error(`Enquiry endpoint responded ${res.status}`);
       setStatus("success");
@@ -166,10 +181,10 @@ export function ContactForm() {
 
           <div className="grid gap-5 sm:grid-cols-2">
             <Field id="name" label="Name" error={errors.name}>
-              <input id="name" name="name" autoComplete="name" className={cn(inputClass, borderFor("name"))} value={values.name} onChange={(e) => set("name", e.target.value)} {...aria("name")} />
+              <input id="name" name="name" autoComplete="name" maxLength={CONTACT_LIMITS.name} className={cn(inputClass, borderFor("name"))} value={values.name} onChange={(e) => set("name", e.target.value)} {...aria("name")} />
             </Field>
             <Field id="email" label="Email" error={errors.email}>
-              <input id="email" name="email" type="email" autoComplete="email" inputMode="email" className={cn(inputClass, borderFor("email"))} value={values.email} onChange={(e) => set("email", e.target.value)} {...aria("email")} />
+              <input id="email" name="email" type="email" maxLength={CONTACT_LIMITS.email} autoComplete="email" inputMode="email" className={cn(inputClass, borderFor("email"))} value={values.email} onChange={(e) => set("email", e.target.value)} {...aria("email")} />
             </Field>
           </div>
 
@@ -183,6 +198,7 @@ export function ContactForm() {
               id="message"
               name="message"
               rows={6}
+              maxLength={CONTACT_LIMITS.message}
               className={cn(inputClass, "resize-y", borderFor("message"))}
               placeholder="e.g. Every month I export our client list from the accounts system and build a billing sheet for each client by hand…"
               value={values.message}
@@ -192,7 +208,7 @@ export function ContactForm() {
           </Field>
 
           <Field id="source" label="How did you hear about GridNodes? (optional)" error={errors.source}>
-            <input id="source" name="source" className={cn(inputClass, borderFor("source"))} value={values.source} onChange={(e) => set("source", e.target.value)} {...aria("source")} />
+            <input id="source" name="source" maxLength={CONTACT_LIMITS.source} className={cn(inputClass, borderFor("source"))} value={values.source} onChange={(e) => set("source", e.target.value)} {...aria("source")} />
           </Field>
 
           {serverError && (
@@ -210,7 +226,11 @@ export function ContactForm() {
 
           <div className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-ink-mute">
-              I&rsquo;ll reply within 2 working days.
+              I&rsquo;ll reply within 2 working days and only use your details to do so (
+              <Link href="/privacy" className="underline decoration-line-strong underline-offset-2 hover:decoration-ink">
+                privacy notice
+              </Link>
+              ).
               <br />
               Prefer email?{" "}
               <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-1 font-medium text-ink underline decoration-line-strong underline-offset-2 hover:decoration-ink">

@@ -21,6 +21,13 @@ export const siteConfig = {
    * Leave empty to switch the online form off (visitors get a mailto link instead).
    */
   enquiryEndpoint: "https://script.google.com/macros/s/AKfycbyZL_LTYEOE5PTtNfhnNwVlNQL7xIg5auv1lmZ_xKd0qlvZXGjHQDtvDR6x17WDhJ_X/exec",
+  privacy: {
+    /** Shown on the privacy notice. Update whenever the notice changes. */
+    lastUpdated: "12 November 2026",
+    /** TODO(Prince): confirm this retention period suits you, or change it. */
+    retention:
+      "I keep enquiries for up to 12 months after our last contact, unless we start working together, in which case I keep what's needed to provide the service and meet my legal obligations.",
+  },
   features: {
     /** Set to true to show the Demos page in the nav and the demos section on the home page. */
     demos: false,

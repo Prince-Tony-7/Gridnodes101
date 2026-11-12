@@ -21,8 +21,9 @@ export function Hero() {
   const copyOpacity = useTransform(scrollYProgress, [0, 0.8], [1, reduce ? 1 : 0.2]);
   const washY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 160]);
   const rise = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0 },
+    // Slide only (no fade-from-invisible) so the headline paints immediately: better LCP, and readable without JS.
+    initial: reduce ? false : { y: 16 },
+    animate: { y: 0 },
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const, delay },
   });
 

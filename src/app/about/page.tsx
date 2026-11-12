@@ -6,8 +6,10 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { absoluteUrl } from "@/lib/url";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/about/") },
   title: "About",
   description:
     "GridNodes is Prince Tony, a Dublin-based Manufacturing Process Engineer who builds n8n automations for Irish small businesses.",

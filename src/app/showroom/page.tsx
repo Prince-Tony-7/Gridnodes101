@@ -4,8 +4,10 @@ import { ShowroomGallery } from "@/components/showroom/ShowroomGallery";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getAllWorkflows } from "@/lib/workflows";
+import { absoluteUrl } from "@/lib/url";
 
 export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/showroom/") },
   title: "Example Workflows",
   description: "Example n8n workflows for small-business admin: client intake, spreadsheet reporting and invoice reminders. Templates, not client deployments.",
 };

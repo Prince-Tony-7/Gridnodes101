@@ -146,7 +146,7 @@ export function WorkflowCanvas({ workflow, compact = false }: { workflow: CaseSt
           <button
             type="button"
             onClick={() => setOverview((v) => !v)}
-            className="inline-flex min-h-9 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white"
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white"
             aria-pressed={overview}
           >
             {overview ? <Maximize2 className="h-3.5 w-3.5" aria-hidden /> : <Minimize2 className="h-3.5 w-3.5" aria-hidden />}
@@ -157,7 +157,14 @@ export function WorkflowCanvas({ workflow, compact = false }: { workflow: CaseSt
         )}
       </div>
 
-      <div ref={ref} className={cn("relative", !overview && "scrollbar-thin overflow-x-auto")}>
+      <div
+        ref={ref}
+        className={cn("relative", !overview && "scrollbar-thin overflow-x-auto focus-visible:outline-offset-[-3px]")}
+        // Keyboard users can focus the diagram and scroll it with the arrow keys.
+        tabIndex={overview ? undefined : 0}
+        role={overview ? undefined : "region"}
+        aria-label={overview ? undefined : `${workflow.title} workflow diagram, scrollable`}
+      >
         <svg
           viewBox={`${layout.minX} ${layout.minY} ${layout.width} ${layout.height}`}
           width={overview ? "100%" : pixelWidth}

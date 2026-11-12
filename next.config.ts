@@ -11,8 +11,12 @@ const basePath = process.env.BASE_PATH?.replace(/\/$/, "") || undefined;
 const nextConfig: NextConfig = {
   output: "export",
   basePath,
-  // Exposed so plain <video>/<img> tags (which Next does not rewrite) can prefix it.
-  env: { NEXT_PUBLIC_BASE_PATH: basePath ?? "" },
+  // Exposed so plain <video>/<img> tags (which Next does not rewrite) can prefix it,
+  // and so canonical URLs / the sitemap can be built as absolute URLs.
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath ?? "",
+    NEXT_PUBLIC_SITE_URL: (process.env.SITE_URL ?? "https://prince-tony-7.github.io").replace(/\/$/, ""),
+  },
   trailingSlash: true,
   images: { unoptimized: true },
   reactStrictMode: true,
